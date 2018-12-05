@@ -65,12 +65,10 @@ def seeNearbyInBuilding(id):
 
 @app.route('/users/<id>/range',methods=['POST'])
 def changeRange(id):
+	aux=request.get_json()
 	cur = mysql.connect().cursor()
-	user_range=10
-	cur.execute(''' update users set range="%d",istid=istid where istid="%s"'''%(user_range,id))
+	cur.execute(''' update users set range="%d",istid=istid where istid="%s"'''%(aux['user_range'],id))
 
-	lat=cur['lat']
-	return str(lat)
 
 
 def distance(_lat1,_lat2,_long1,_long2,_range):
