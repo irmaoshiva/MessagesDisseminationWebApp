@@ -4,7 +4,7 @@ from django.utils import timezone
 # Create your models here.
 
 class Buildings(models.Model):
-	id = models.IntegerField(primary_key = True)
+	id = models.CharField(max_length = 255, primary_key = True)
 	name = models.CharField(max_length = 255)
 	lat = models.FloatField()
 	longit= models.FloatField()
