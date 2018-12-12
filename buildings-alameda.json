@@ -1,0 +1,46 @@
+{
+  "type" : "CAMPUS",
+  "id" : "2448131360897",
+  "name" : "Alameda",
+  "containedSpaces" : [ {
+    "id" : "2448131361042",
+    "name" : "Pavilhão de Civil",
+    "lat": 38.7368263,
+    "longit" : -9.139276
+  }, {
+    "id" : "2448131361155",
+    "name" : "Pavilhão de Mecânica III",
+    "lat":38.7368263,
+    "longit": -9.139276
+  },{
+    "id" : "2448131384238",
+    "name" : "Pavilhão da Associação dos Estudantes",
+    "lat": 38.7368942,
+    "longit": -9.1378801
+  }, {
+    "id" : "2448131361129",
+    "name" : "Pavilhão de Informática III",
+    "lat": 38.7374625,
+    "longit": -9.1378465
+  }, {
+    "id" : "2448131361074",
+    "name" : "Torre Sul",
+    "lat": 38.7363775,
+    "longit": -9.138574
+  },{
+    "id" : "2448131361091",
+    "name" : "Torre Norte",
+    "lat" : 38.7375584,
+    "longit" : -9.1387255
+  },{
+    "id" : "2448131361119",
+    "name" : "Pavilhão de Matemática",
+    "lat": 38.7358895,
+    "longit": -9.1399463
+  },{
+    "id" : "2448131361060",
+    "name" : "Pavilhão Central",
+    "lat": 38.7368098,
+    "longit": -9.1397191
+  }]
+}
