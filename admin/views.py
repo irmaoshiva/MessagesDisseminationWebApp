@@ -32,16 +32,28 @@ def buildings(request):
 		response = serialize("json", _buildings)
 		return HttpResponse(response, content_type = 'application/json')
 
+
+def buildingsNum(request,num):
+	_building=Buildings.objects.filter(id=num)
+	response = serialize("json", _building)
+	return HttpResponse(response, content_type = 'application/json')
+
+
 def users(request):
 	users_dict = Users.objects.all()
-	
-	for aux in users_dict:
-		print("IST ID:")
-		print(aux[])
-		aux = aux['fields']
+	response = serialize("json", users_dict)
+	return HttpResponse(response, content_type = 'application/json')
 
 
-	return HttpResponse('<h1>SHOW ALL USER</h1>')
+def oneUser(request, ist_id):
+	_user=Users.objects.filter(ist_id=ist_id)
+	response = serialize("json", _user)
+	return HttpResponse(response, content_type = 'application/json')
+
+def listUsersInBuilding(request,num):
+	_users= Users.objects.filter(build_id=num)
+	response = serialize("json", _users)
+	return HttpResponse(response, content_type = 'application/json')
 
 
 # from management.models import Buildings, Users

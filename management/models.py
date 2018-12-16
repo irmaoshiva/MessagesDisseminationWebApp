@@ -10,7 +10,7 @@ class Buildings(models.Model):
 	longit= models.FloatField()
 
 	def __str__(self):
-		return self.name
+		return self.id
 
 class Users(models.Model):
 	ist_id = models.CharField(max_length = 10, primary_key = True)
