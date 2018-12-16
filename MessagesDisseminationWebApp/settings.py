@@ -123,6 +123,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-AUTHENTICATION_BACKENDS = (
-    'fenixedu.authentication.backend.FenixEduAuthenticationBackend',
-)
+#AUTHENTICATION_BACKENDS = (
+ #   'fenixedu.authentication.backend.FenixEduAuthenticationBackend',
+#)

@@ -32,13 +32,11 @@ config = fenixedu.FenixEduConfiguration \
 
 
 
-client = fenixedu.FenixEduClient(config)
 
 
 
 def index(request):
-	context = {'auth_url': client.get_authentication_url()}
-	return render(request, './login.html', context)
+	return render(request, './login.html')
 
 
 
@@ -49,20 +47,43 @@ def index(request):
 #	_user.save()
 #	return HttpResponse('<h1>Login Page</h1>')
 
+client_id ='1695915081465930'
+redirect_uri = 'http://127.0.0.1:8000/app/login/'
+secret= 'XXknAbAk2nTLFdYByKqjDXVC+k94NYc5t34EUGYAxD4qaWUB+aopdY2z/9j5oRvDoTJFpaHhg42dsQ+mf6Gesg=='
+
+
 
 def auth(request):
-	global client
-	print("iiiiiiiiiiiiiiiiiiiiiiiiiiii")
-	code = request.GET.get('code', None)
-	print('o codigo e...')
+	global client_id
+	global redirect_uri
+	print("iiiiiiiiiiiiiiiiiiiiiiiiiijjjjjjjjjjjjjjnnnnnnii")
+	request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/userdialog?client_id=' + client_id + '&redirect_uri=' + redirect_uri
+	return redirect(request_url)
+
+
+def login(request):
+	global client_id
+	global redirect_uri
+	global secret
+	print('ola')
+	code = request.GET.get('code')
 	print(code)
-	if code is not None and not request.user.is_authenticated:
-		print('xxxxxxxxxxx')
-		user = authenticate(request=request, client=client, code=code)
-		print('yyyyyyyyyyyyyyyyyy')
-		if user is not None:
-			login(request, user)
-	print("ooooooooooooooooooooooooooooooooooo")
+	access_token_request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/access_token'
+	_data = {'client_id': client_id, 'client_secret': secret,'redirect_uri': redirect_uri, 'code': code, 'grant_type': 'authorization_code'}
+	request_access_token = requests.post(access_token_request_url, data=_data)
+	if request_access_token.status_code != 200 or 'error' in request_access_token.json():
+		return render(request, './invalid.html')
+	else:
+		access_token = request_access_token.json()['access_token']
+		params={'access_token': access_token}
+		request_info = requests.get('https://fenix.tecnico.ulisboa.pt/api/fenix/v1/person', params=params)
+		print(request_info)
+		# tem de se sacar o id do gajo mas nao consegui!!
+		#_ist_id=request_info.json()['username']
+		print('o ist_id é')
+		# print(_ist_id)
+		return render(request, './userInterface.html')
+
 
 
 

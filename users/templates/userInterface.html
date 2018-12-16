@@ -1,0 +1,16 @@
+
+<html>
+<body>
+  	<h1>Welcome to MessagesDissemination </h1>
+  	<h2>User</h2>
+
+  	<p class="inputRange">Insert Range </p>
+  	 <form  method="post" action="{% url 'users:range' %}">
+            {% csrf_token %}
+            <input type="submit" value="Range" />
+	</form>
+
+
+
+</body>
+</html>
