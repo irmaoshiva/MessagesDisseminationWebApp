@@ -9,6 +9,7 @@ urlpatterns = [
 	path('', csrf_exempt(views.index), name = 'home'),
 	path('auth/', csrf_exempt(views.auth), name = 'auth'),
 	path('login/', csrf_exempt(views.login), name = 'login'),
+	path('logout/', csrf_exempt(views.logout), name = 'logout'),
 	#path('<str:ist_id>/messages/', csrf_exempt(views.messages), name = 'messages'),
     path('range/', csrf_exempt(views.range), name = 'range'),
     path('message/', csrf_exempt(views.sendMessage), name = 'sendMessage'),

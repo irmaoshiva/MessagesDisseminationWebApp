@@ -86,6 +86,16 @@ def login(request):
 		context ={'user':nr}
 		return render(request, './userInterface.html',context)
 
+def logout(request):
+	# é para retirar isto:
+	ist_id='ist425000'
+	if request.method=='POST':
+		print('x')
+		Users.objects.filter(ist_id=ist_id).delete()
+		return render(request, './GoodBye.html')
+
+
+
 
 
 

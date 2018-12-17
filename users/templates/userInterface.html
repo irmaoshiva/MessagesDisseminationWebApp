@@ -21,6 +21,14 @@
                  <input type="text" name="message"><br> <input type="submit"  />
 	</form>
 
+	<form  method="post" action="{% url 'users:logout' %}">
+            {% csrf_token %}
+            <br>
+            <input type="submit" value="Lougout" />
+	</form>
+
+
+
 
 
 </body>
