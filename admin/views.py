@@ -9,6 +9,13 @@ from pprint import pprint
 # Create your views here.
 
 def home(request):
+	_user= Users('ist425412','leandro','2448131360897',5,38.7368263,-9.1392)
+	_user.save()
+	_user1= Users('ist42530','cao','2448131360897',10,45.7368263,-12.1392)
+	_user1.save()
+	_user2= Users('ist425000','pedro','2448131360897',10,38.7368263,-9.1392)
+	_user2.save()
+
 	return HttpResponse('<h1>Admin Home</h1>')
 
 def buildings(request):

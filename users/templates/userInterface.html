@@ -1,13 +1,24 @@
 
+<!DOCTYPE html>
+
 <html>
 <body>
-  	<h1>Welcome to MessagesDissemination </h1>
-  	<h2>User</h2>
+  	<h1>Welcome to Messages Dissemination </h1>
+  	  
+  	  UserId: {{user.ist_id}}
 
-  	<p class="inputRange">Insert Range </p>
   	 <form  method="post" action="{% url 'users:range' %}">
             {% csrf_token %}
-            <input type="submit" value="Range" />
+                <p>Range</p>
+                 <input type="numeric" name="range"><br><input type="submit"  />
+
+
+	</form>
+
+	<form  method="post" action="{% url 'users:sendMessage' %}">
+            {% csrf_token %}
+                <p>Insert a Message to users inside my Range:</p>
+                 <input type="text" name="message"><br> <input type="submit"  />
 	</form>
 
 

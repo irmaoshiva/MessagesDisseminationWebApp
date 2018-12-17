@@ -11,6 +11,8 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 import requests
+from django.utils.timezone import now
+
 
 
 import json
@@ -22,8 +24,6 @@ from django.conf import settings
 from django.utils import timezone
 
 
-# Create your views here.
-
 
 config = fenixedu.FenixEduConfiguration \
 	('1695915081465930', 'http://127.0.0.1:8000/app/auth/', 
@@ -31,13 +31,8 @@ config = fenixedu.FenixEduConfiguration \
 		'https://fenix.tecnico.ulisboa.pt/')
 
 
-
-
-
-
 def index(request):
 	return render(request, './login.html')
-
 
 
 # def login(request):
@@ -62,6 +57,10 @@ def auth(request):
 
 
 def login(request):
+	#para retirar e meter var. sessao
+	ist_id='ist425412'
+
+
 	global client_id
 	global redirect_uri
 	global secret
@@ -82,13 +81,18 @@ def login(request):
 		#_ist_id=request_info.json()['username']
 		print('o ist_id é')
 		# print(_ist_id)
-		return render(request, './userInterface.html')
+		nr={}
+		nr['ist_id']=ist_id
+		context ={'user':nr}
+		return render(request, './userInterface.html',context)
 
 
 
 
-def range(request,ist_id):
+def range(request):
 	if request.method == 'POST':
+		# e para ir buscar a var. sessao
+		ist_id='ist425412'
 		_range= request.POST.get('range', '')
 		Users.objects.filter(ist_id=ist_id).update(range_user = _range)
 		return HttpResponse('<h1>oii/h1>')
@@ -114,7 +118,8 @@ def checkDistance(_lat1,_lat2,_long1,_long2,_range):
 	return 0
 
 
-def nearbyRange(request,ist_id):
+def nearbyRange(request):
+	ist_id='ist425412'
 	_data= Users.objects.filter(ist_id=ist_id)
 	for aux in _data:
 		_range=aux.range_user
@@ -135,7 +140,8 @@ def nearbyRange(request,ist_id):
 	
 
 
-def nearbyBuilding(request, ist_id):
+def nearbyBuilding(request):
+	ist_id='ist425412'
 	_me=Users.objects.filter(ist_id=ist_id)
 	for aux in _me:
 		print(aux.build_id)
@@ -144,7 +150,36 @@ def nearbyBuilding(request, ist_id):
 	return HttpResponse(response, content_type = 'application/json')
 	
 
+def sendMessage(request):
+	ist_id='ist425412'
+	if request.method == 'POST':
+		_content=request.POST.get('message', '')
+		_data= Users.objects.filter(ist_id=ist_id)
+		for aux in _data:
+			_range=aux.range_user
+			_lat=aux.lat
+			_longit=aux.longit
+	# Q is to exclude the user with this ist_id
+		_allUsers=Users.objects.all().filter(~Q(ist_id=ist_id))
 
+		for item in _allUsers:
+			if checkDistance(item.lat,_lat,item.longit,_longit,_range)==1:
+				_message=Messages(content=_content,receiver=item,date=now())
+				_message.save()
+			
+	allMessages=Messages.objects.all()
+	response = serialize("json", allMessages)
+	return HttpResponse(response, content_type = 'application/json')
+
+
+
+
+# def login(request):
+#	_buildx=Buildings.objects.get(id=2448131361155)
+#	print("olaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+#	_user = Users(ist_id = 'ist000', name = 'pedro', build_id=_buildx, range_user=10,lat= -15.3888, longit=-40.777)
+#	_user.save()
+#	return HttpResponse('<h1>Login Page</h1>')
 
 
 

@@ -3,6 +3,7 @@ from django.utils import timezone
 
 # Create your models here.
 
+
 class Buildings(models.Model):
 	id = models.CharField(max_length = 255, primary_key = True)
 	name = models.CharField(max_length = 255)
@@ -15,7 +16,7 @@ class Buildings(models.Model):
 class Users(models.Model):
 	ist_id = models.CharField(max_length = 10, primary_key = True)
 	name = models.CharField(max_length = 255)
-	build_id = models.ForeignKey(Buildings, on_delete = models.CASCADE)
+	build_id = models.CharField(max_length = 255)
 	range_user = models.IntegerField()
 	lat = models.FloatField()
 	longit = models.FloatField()
@@ -23,9 +24,10 @@ class Users(models.Model):
 	def __str__(self):
 		return self.ist_id
 
+
 class Messages(models.Model):
 	content = models.CharField(max_length = 255)
-	build_id = models.ForeignKey(Buildings, on_delete = models.CASCADE)
+	receiver = models.ForeignKey(Users, on_delete = models.CASCADE)
 	date = models.DateTimeField(default = timezone.now)
 
 	def __str__(self):

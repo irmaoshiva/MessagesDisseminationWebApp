@@ -10,9 +10,10 @@ urlpatterns = [
 	path('auth/', csrf_exempt(views.auth), name = 'auth'),
 	path('login/', csrf_exempt(views.login), name = 'login'),
 	#path('<str:ist_id>/messages/', csrf_exempt(views.messages), name = 'messages'),
-    path('<str:ist_id>/range/', csrf_exempt(views.range), name = 'range'),
-    path('<str:ist_id>/nearby/range/', csrf_exempt(views.nearbyRange), name = 'nearbyRange'),
-    path('<str:ist_id>/nearby/building/', csrf_exempt(views.nearbyBuilding), name = 'nearbyBuilding'),
+    path('range/', csrf_exempt(views.range), name = 'range'),
+    path('message/', csrf_exempt(views.sendMessage), name = 'sendMessage'),
+    path('nearby/range/', csrf_exempt(views.nearbyRange), name = 'nearbyRange'),
+    path('nearby/building/', csrf_exempt(views.nearbyBuilding), name = 'nearbyBuilding'),
     ]
 
 
