@@ -2,10 +2,47 @@
 <!DOCTYPE html>
 
 <html>
+
+
+<head>
+
+
+	<script>
+
+			function getLocation() {
+					var x = document.getElementById("demo");
+			    if (navigator.geolocation) {
+			        navigator.geolocation.getCurrentPosition(showPosition);
+			    } else { 
+			        x.innerHTML = "Geolocation is not supported by this browser.";
+			    }
+			}
+
+			function showPosition(position) {
+				var x = document.getElementById("demo");
+			    x.innerHTML = "Latitude: " + position.coords.latitude + 
+			    "<br>Longitude: " + position.coords.longitude; 
+			}
+
+
+
+	</script>
+
+</head>
 <body>
   	<h1>Welcome to Messages Dissemination </h1>
   	  
-  	  UserId: {{user.ist_id}}
+  	  Ist_id: {{user.ist_id}}
+
+  	  <p> </p>
+  	  Name: {{user.name}} 
+
+
+	<script>getLocation()</script>
+
+	<p id="demo"></p>
+
+
 
   	 <form  method="post" action="{% url 'users:range' %}">
             {% csrf_token %}
@@ -21,11 +58,15 @@
                  <input type="text" name="message"><br> <input type="submit"  />
 	</form>
 
+	
+
+
 	<form  method="post" action="{% url 'users:logout' %}">
             {% csrf_token %}
             <br>
             <input type="submit" value="Lougout" />
 	</form>
+
 
 
 

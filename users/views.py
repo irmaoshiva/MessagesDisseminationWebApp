@@ -8,10 +8,14 @@ import fenixedu
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 import requests
 from django.utils.timezone import now
+
+
+# para a cache
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 
 
@@ -25,14 +29,16 @@ from django.utils import timezone
 
 
 
-config = fenixedu.FenixEduConfiguration \
-	('1695915081465930', 'http://127.0.0.1:8000/app/auth/', 
-		'XXknAbAk2nTLFdYByKqjDXVC+k94NYc5t34EUGYAxD4qaWUB+aopdY2z/9j5oRvDoTJFpaHhg42dsQ+mf6Gesg==',
-		'https://fenix.tecnico.ulisboa.pt/')
+
+client_id ='1695915081465930'
+redirect_uri = 'http://127.0.0.1:8000/app/auth/'
+request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/userdialog?client_id=' + client_id + '&redirect_uri=' + redirect_uri
+secret= 'XXknAbAk2nTLFdYByKqjDXVC+k94NYc5t34EUGYAxD4qaWUB+aopdY2z/9j5oRvDoTJFpaHhg42dsQ+mf6Gesg=='
 
 
 def index(request):
 	return render(request, './login.html')
+
 
 
 # def login(request):
@@ -42,48 +48,43 @@ def index(request):
 #	_user.save()
 #	return HttpResponse('<h1>Login Page</h1>')
 
-client_id ='1695915081465930'
-redirect_uri = 'http://127.0.0.1:8000/app/login/'
-secret= 'XXknAbAk2nTLFdYByKqjDXVC+k94NYc5t34EUGYAxD4qaWUB+aopdY2z/9j5oRvDoTJFpaHhg42dsQ+mf6Gesg=='
 
 
-
-def auth(request):
-	global client_id
-	global redirect_uri
-	print("iiiiiiiiiiiiiiiiiiiiiiiiiijjjjjjjjjjjjjjnnnnnnii")
-	request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/userdialog?client_id=' + client_id + '&redirect_uri=' + redirect_uri
-	return redirect(request_url)
 
 
 def login(request):
-	#para retirar e meter var. sessao
-	ist_id='ist425412'
+	return redirect(request_url)
 
 
-	global client_id
-	global redirect_uri
-	global secret
-	print('ola')
+def auth(request):
+	
 	code = request.GET.get('code')
-	print(code)
 	access_token_request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/access_token'
 	_data = {'client_id': client_id, 'client_secret': secret,'redirect_uri': redirect_uri, 'code': code, 'grant_type': 'authorization_code'}
+	
 	request_access_token = requests.post(access_token_request_url, data=_data)
+
+
 	if request_access_token.status_code != 200 or 'error' in request_access_token.json():
 		return render(request, './invalid.html')
 	else:
-		access_token = request_access_token.json()['access_token']
-		params={'access_token': access_token}
+		access_token = request_access_token.json().get('access_token')
+		refresh_token = request_access_token.json().get('refresh_token')
+		token_expires = request_access_token.json().get('expires_in')
+
+		params = {'access_token': access_token}
 		request_info = requests.get('https://fenix.tecnico.ulisboa.pt/api/fenix/v1/person', params=params)
-		print(request_info)
-		# tem de se sacar o id do gajo mas nao consegui!!
-		#_ist_id=request_info.json()['username']
-		print('o ist_id é')
-		# print(_ist_id)
+		_ist_id = request_info.json().get('username')
+		_name = request_info.json().get('name')
+
+
 		nr={}
-		nr['ist_id']=ist_id
+		nr['ist_id']=_ist_id
+		nr['name']=_name
 		context ={'user':nr}
+		if not Users.objects.filter(ist_id=_ist_id).exists():
+			_user= User(ist_id=_ist_id, name= _name)
+			_user.save()
 		return render(request, './userInterface.html',context)
 
 def logout(request):
@@ -93,6 +94,7 @@ def logout(request):
 		print('x')
 		Users.objects.filter(ist_id=ist_id).delete()
 		return render(request, './GoodBye.html')
+
 
 
 
@@ -160,6 +162,7 @@ def nearbyBuilding(request):
 	return HttpResponse(response, content_type = 'application/json')
 	
 
+# @login_required(login_url='users:home')
 def sendMessage(request):
 	ist_id='ist425412'
 	if request.method == 'POST':

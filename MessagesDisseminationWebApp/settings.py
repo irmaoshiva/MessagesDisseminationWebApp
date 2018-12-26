@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -103,6 +105,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -123,6 +128,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-#AUTHENTICATION_BACKENDS = (
- #   'fenixedu.authentication.backend.FenixEduAuthenticationBackend',
-#)
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
