@@ -15,7 +15,8 @@ from django.utils.timezone import now
 
 # para a cache
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+from django.core.cache import cache
+
 
 
 
@@ -26,6 +27,9 @@ import string
 from django.db import connection
 from django.conf import settings
 from django.utils import timezone
+
+
+# é para tirar isto daqui pois vai para os cookies!
 
 
 
@@ -49,6 +53,15 @@ def index(request):
 #	return HttpResponse('<h1>Login Page</h1>')
 
 
+def auxiliar(request):
+	access_token=request.COOKIES.get('token')
+	print("access_token")
+	print(access_token)
+	x=cache.get(access_token,-1)
+	print("ist id é")
+	print(x)
+	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
+
 
 
 
@@ -56,8 +69,8 @@ def login(request):
 	return redirect(request_url)
 
 
+
 def auth(request):
-	
 	code = request.GET.get('code')
 	access_token_request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/access_token'
 	_data = {'client_id': client_id, 'client_secret': secret,'redirect_uri': redirect_uri, 'code': code, 'grant_type': 'authorization_code'}
@@ -69,6 +82,8 @@ def auth(request):
 		return render(request, './invalid.html')
 	else:
 		access_token = request_access_token.json().get('access_token')
+		print("acess_token no login")
+		print(access_token)
 		refresh_token = request_access_token.json().get('refresh_token')
 		token_expires = request_access_token.json().get('expires_in')
 
@@ -77,34 +92,42 @@ def auth(request):
 		_ist_id = request_info.json().get('username')
 		_name = request_info.json().get('name')
 
+		y=cache.set(access_token,_ist_id,60*1)
+		
 
 		nr={}
 		nr['ist_id']=_ist_id
 		nr['name']=_name
 		context ={'user':nr}
-		if not Users.objects.filter(ist_id=_ist_id).exists():
-			_user= User(ist_id=_ist_id, name= _name)
+		if not Users.objects.filter(ist_id =_ist_id).exists():
+			_user= Users(ist_id = _ist_id, name= _name, build_id='1', range_user = 100, lat=38.7368263, longit= -9.1392)
 			_user.save()
-		return render(request, './userInterface.html',context)
+
+		response = render(request, './userInterface.html',context)
+		response.set_cookie('token', access_token)
+		return response
 
 def logout(request):
 	# é para retirar isto:
-	ist_id='ist425000'
+	access_token=request.COOKIES.get('token')
+	ist_id=cache.get(access_token,-1)
 	if request.method=='POST':
-		print('x')
+		cache.delete('token')
+		if request.COOKIES.get('token'):
+			response = HttpResponse('Cookies cleared')
+			response.delete_cookie('token')
 		Users.objects.filter(ist_id=ist_id).delete()
+		print('dentro do logout-> a cache é')
+		print(cache.get('id'))
 		return render(request, './GoodBye.html')
-
-
-
-
 
 
 
 def range(request):
 	if request.method == 'POST':
 		# e para ir buscar a var. sessao
-		ist_id='ist425412'
+		access_token=request.COOKIES.get('token')
+		ist_id=cache.get(access_token,-1)
 		_range= request.POST.get('range', '')
 		Users.objects.filter(ist_id=ist_id).update(range_user = _range)
 		return HttpResponse('<h1>oii/h1>')
@@ -131,7 +154,8 @@ def checkDistance(_lat1,_lat2,_long1,_long2,_range):
 
 
 def nearbyRange(request):
-	ist_id='ist425412'
+	access_token=request.COOKIES.get('token')
+	ist_id=cache.get(access_token,-1)
 	_data= Users.objects.filter(ist_id=ist_id)
 	for aux in _data:
 		_range=aux.range_user
@@ -153,7 +177,8 @@ def nearbyRange(request):
 
 
 def nearbyBuilding(request):
-	ist_id='ist425412'
+	access_token=request.COOKIES.get('token')
+	ist_id=cache.get(access_token,-1)
 	_me=Users.objects.filter(ist_id=ist_id)
 	for aux in _me:
 		print(aux.build_id)
@@ -164,7 +189,8 @@ def nearbyBuilding(request):
 
 # @login_required(login_url='users:home')
 def sendMessage(request):
-	ist_id='ist425412'
+	access_token=request.COOKIES.get('token')
+	ist_id=cache.get(access_token,-1)
 	if request.method == 'POST':
 		_content=request.POST.get('message', '')
 		_data= Users.objects.filter(ist_id=ist_id)
@@ -183,6 +209,19 @@ def sendMessage(request):
 	allMessages=Messages.objects.all()
 	response = serialize("json", allMessages)
 	return HttpResponse(response, content_type = 'application/json')
+
+
+def updateLocation(request):
+	if request.method =='POST':
+		print('recebi um POST NO updateLocation')
+		_lat=request.POST.get('lat')
+		_longit=request.POST.get('longit')
+		print("latitudee")
+		print(_lat)
+		print("longit")
+		print(_longit)
+	return HttpResponse('<p>atualizou</p>')
+
 
 
 

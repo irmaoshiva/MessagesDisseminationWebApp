@@ -131,6 +131,8 @@ STATIC_URL = '/static/'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'KEY_PREFIX': 'myapp',
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
