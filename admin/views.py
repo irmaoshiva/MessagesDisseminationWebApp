@@ -22,25 +22,16 @@ def home(request):
 
 def buildings(request):
 	if request.method == 'POST':
-		#Deleting database
-		Buildings.objects.all().delete()
-
-		json_data = open('buildings-alameda.json')
-		buildings_dict = json.load(json_data) #deserialises data
-		buildings_dict = buildings_dict['containedSpaces']
-
-		for aux in buildings_dict:
-			pprint(aux)
-
-			_building = Buildings(id = aux['id'], name = aux['name'], lat = aux['lat'], longit = aux['longit'])
-			_building.save()
+		aux = request.POST
+		pprint(aux)
+		_building = Buildings(id = aux['id'], name = aux['name'], lat = aux['lat'], longit = aux['longit'])
+		_building.save()
 
 		return HttpResponse('<h1>SHOW ALL BUILDINGS</h1>')
 	else:
 		_buildings = Buildings.objects.all()	
 		response = serialize("json", _buildings)
 		return HttpResponse(response, content_type = 'application/json')
-
 
 def buildingsNum(request,num):
 	_building=Buildings.objects.filter(id=num)
