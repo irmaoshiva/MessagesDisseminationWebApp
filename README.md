@@ -13,4 +13,6 @@ Internet Based Systems Architecture course project
 -> Meter em tudo '@login_required()'/ ou '@method_decorator' para só dar acesso se o login estiver feito!
 
 -> Ver a 'gestão' da cache e das cookies, pois a unica coisa que fiz foi criar e meter um timeout a toa, e dps apagar no logout!
+
+->Ver o período de atualização da latitude e longitude (de momento está 5 segs acho eu)
  
