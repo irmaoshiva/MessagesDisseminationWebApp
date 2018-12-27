@@ -237,11 +237,11 @@ def sendMessageBuild(request):
 # nao testado
 def checkBuilding(_latUser,_longitUser):
 	#verificar qual o raio a meter
-	radius=2
+	radius=100
 	allBuilds=Buildings.objects.all()
 	for item in allBuilds:
 		if checkDistance(_latUser,item.lat,_longitUser,item.longit,radius)==1:
-			return _build_id
+			return item.id
 	return -1
 	
 
@@ -250,8 +250,11 @@ def updateLocation(request):
 	if request.method =='POST':
 		print('recebi um POST NO updateLocation')
 		_lat=request.POST.get('lat')
+		_lat= float(_lat)
 		_longit=request.POST.get('longit')
+		_longit=float(_longit)
 		print("latitudee")
+		print(type(_lat))
 		print(_lat)
 		print("longit")
 		print(_longit)
