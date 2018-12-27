@@ -10,6 +10,32 @@
 
 	<script type="text/javascript">
 		var timer=0;
+
+
+		function post(path, params, method) {
+		    method = method || "post"; // Set method to post by default if not specified.
+
+		    // The rest of this code assumes you are not using a library.
+		    // It can be made less wordy if you use one.
+		    var form = document.createElement("form");
+		    form.setAttribute("method", method);
+		    form.setAttribute("action", path);
+
+		    for(var key in params) {
+		        if(params.hasOwnProperty(key)) {
+		            var hiddenField = document.createElement("input");
+		            hiddenField.setAttribute("type", "hidden");
+		            hiddenField.setAttribute("name", key);
+		            hiddenField.setAttribute("value", params[key]);
+
+		            form.appendChild(hiddenField);
+		        }
+		    }
+
+		    document.body.appendChild(form);
+		    form.submit();
+		}
+
 			function getLocation() {
 				timer=timer+1;
 					var x = document.getElementById("demo");
@@ -24,10 +50,13 @@
 			        x.innerHTML = "Geolocation is not supported by this browser.";
 			    }
 			}
+
 			function showPosition(position) {
 				var x = document.getElementById("demo");
 			    x.innerHTML = "Latitude: " + position.coords.latitude + 
 			    "<br>Longitude: " + position.coords.longitude; 
+			    // post('/app/updateLocation/', {'lat': position.coords.latitude, 'longit': position.coords.longitude});
+
 			}
 
 
@@ -41,6 +70,10 @@
 					$(document).ready(function(){
 					    doPeriod();
 					});
+
+
+
+
 		</script>
 
 
