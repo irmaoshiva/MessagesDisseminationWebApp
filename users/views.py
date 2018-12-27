@@ -92,7 +92,7 @@ def auth(request):
 		_ist_id = request_info.json().get('username')
 		_name = request_info.json().get('name')
 
-		y=cache.set(access_token,_ist_id,60*1)
+		y=cache.set(access_token,_ist_id,60*5)
 		
 
 		nr={}
@@ -211,6 +211,41 @@ def sendMessage(request):
 	return HttpResponse(response, content_type = 'application/json')
 
 
+# ESTE NÃO ESTÁ TESTADO!!!
+def sendMessageBuild(request):
+	access_token=request.COOKIES.get('token')
+	ist_id=cache.get(access_token,-1)
+	if request.method == 'POST':
+		_content=request.POST.get('message', '')
+		_data= Users.objects.filter(ist_id=ist_id)
+		for aux in _data:
+			_build_id=aux.build_id
+			
+	# Q is to exclude the user with this ist_id
+		_allUsers=Users.objects.all().filter(~Q(ist_id=ist_id))
+
+		for item in _allUsers:
+			if item.build_id==_build_id:
+				_message=Messages(content=_content,receiver=item,date=now())
+				_message.save()
+			
+	allMessages=Messages.objects.all()
+	response = serialize("json", allMessages)
+	return HttpResponse(response, content_type = 'application/json')
+
+
+# nao testado
+def checkBuilding(_latUser,_longitUser):
+	#verificar qual o raio a meter
+	radius=2
+	allBuilds=Buildings.objects.all()
+	for item in allBuilds:
+		if checkDistance(_latUser,item.lat,_longitUser,item.longit,radius)==1:
+			return _build_id
+	return -1
+	
+
+#nao bem testado pcausa do ajax
 def updateLocation(request):
 	if request.method =='POST':
 		print('recebi um POST NO updateLocation')
@@ -220,7 +255,12 @@ def updateLocation(request):
 		print(_lat)
 		print("longit")
 		print(_longit)
-	return HttpResponse('<p>atualizou</p>')
+		access_token=request.COOKIES.get('token')
+		_ist_id=cache.get(access_token,-1)
+		_build_id = checkBuilding(_lat,_longit)
+		Users.objects.filter(ist_id=_ist_id).update(lat = _lat, longit = _longit, build_id= _build_id)
+
+		return HttpResponse('<p>nadaa</p>')		
 
 
 

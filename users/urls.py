@@ -13,6 +13,7 @@ urlpatterns = [
 	#path('<str:ist_id>/messages/', csrf_exempt(views.messages), name = 'messages'),
     path('range/', csrf_exempt(views.range), name = 'range'),
     path('message/', csrf_exempt(views.sendMessage), name = 'sendMessage'),
+    path('messageBuilding/', csrf_exempt(views.sendMessageBuild), name = 'sendMessageBuild'),
     path('nearby/range/', csrf_exempt(views.nearbyRange), name = 'nearbyRange'),
     path('nearby/building/', csrf_exempt(views.nearbyBuilding), name = 'nearbyBuilding'),
     path('updateLocation/', csrf_exempt(views.updateLocation), name = 'updateLocation'),

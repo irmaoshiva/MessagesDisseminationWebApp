@@ -6,54 +6,44 @@
 
 <head>
 
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
-	<script>
-
-			function post(path, params, method) {
-			    method = method || "post"; // Set method to post by default if not specified.
-
-			    // The rest of this code assumes you are not using a library.
-			    // It can be made less wordy if you use one.
-			    var form = document.createElement("form");
-			    form.setAttribute("method", method);
-			    form.setAttribute("action", path);
-
-			    for(var key in params) {
-			        if(params.hasOwnProperty(key)) {
-			            var hiddenField = document.createElement("input");
-			            hiddenField.setAttribute("type", "hidden");
-			            hiddenField.setAttribute("name", key);
-			            hiddenField.setAttribute("value", params[key]);
-
-			            form.appendChild(hiddenField);
-			        }
-			    }
-
-			    document.body.appendChild(form);
-			    form.submit();
-				}
-
+	<script type="text/javascript">
+		var timer=0;
 			function getLocation() {
+				timer=timer+1;
 					var x = document.getElementById("demo");
+										var y = document.getElementById("demo2");
+										y.innerHTML=timer;
+
+
+
 			    if (navigator.geolocation) {
 			        navigator.geolocation.getCurrentPosition(showPosition);
 			    } else { 
 			        x.innerHTML = "Geolocation is not supported by this browser.";
 			    }
 			}
-
 			function showPosition(position) {
 				var x = document.getElementById("demo");
 			    x.innerHTML = "Latitude: " + position.coords.latitude + 
 			    "<br>Longitude: " + position.coords.longitude; 
-
-			    post('/contact/', {'lat':position.coords.latitude, 'longit':position.coords.longitude });
-
 			}
 
 
+					var myVar;    
+					function doPeriod(){
 
-	</script>
+						getLocation()
+					    myVar = setTimeout(doPeriod, 5000);
+					}
+
+					$(document).ready(function(){
+					    doPeriod();
+					});
+		</script>
+
+
 
 </head>
 <body>
@@ -65,23 +55,42 @@
   	  Name: {{user.name}} 
 
 
-	<script>getLocation()</script>
+	<style>
+ 		 .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }
+	</style>
+	<iframe name="hiddenFrame" class="hide"></iframe>
+
+
+
+	<script >getLocation()</script>
+
+
 
 	<p id="demo"></p>
 
+	<p> ESTE AQUI É SÓ PARA CHECHAR QUE ESTA PERIODICO->É A VARIAVEL TIMER-> É PARA TIRAR </p>
+		<p id="demo2"></p>
 
 
-  	 <form  method="post" action="{% url 'users:range' %}">
-            {% csrf_token %}
-                <p>Range</p>
-                 <input type="numeric" name="range"><br><input type="submit"  />
 
 
+
+	<form action="{% url 'users:range' %}" method="post" target="hiddenFrame">
+		  {% csrf_token %}
+	      <p>Range</p>
+      	 <input type="numeric" name="range"><br><input type="submit"  />
 	</form>
 
-	<form  method="post" action="{% url 'users:sendMessage' %}">
+	<form  method="post" action="{% url 'users:sendMessage' %}" target="hiddenFrame">
             {% csrf_token %}
                 <p>Insert a Message to users inside my Range:</p>
+                 <input type="text" name="message"><br> <input type="submit"  />
+	</form>
+
+
+	<form  method="post" action="{% url 'users:sendMessageBuild' %}" target="hiddenFrame">
+            {% csrf_token %}
+                <p>Insert a Message to users in my Building:</p>
                  <input type="text" name="message"><br> <input type="submit"  />
 	</form>
 
@@ -101,3 +110,4 @@
 
 </body>
 </html>
+
