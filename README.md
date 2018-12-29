@@ -18,3 +18,8 @@ Internet Based Systems Architecture course project
 
 -> que raio é para meter para saber em que building ta o user ? meti 100 a toa! Ver a coerencia de unidades (km's e metros).. está a toa
  
+
+-----------------
+há includes repetidos
+
+meter o router default para redirecionar para a app
