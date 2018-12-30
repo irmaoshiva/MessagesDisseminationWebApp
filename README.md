@@ -17,4 +17,11 @@ Internet Based Systems Architecture course project
 ->Ver o período de atualização da latitude e longitude (de momento está 5 segs acho eu)
 
 -> que raio é para meter para saber em que building ta o user ? meti 100 a toa! Ver a coerencia de unidades (km's e metros).. está a toa
+
+-> No Admin ver a questão de numa aplicação local o @login_required estar a deixar passar e no browser funcionar bem
  
+
+-----------------
+há includes repetidos
+
+meter o router default para redirecionar para a app
