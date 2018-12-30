@@ -57,11 +57,11 @@ def login_view(request):
 			return HttpResponse('<h1>Error: Invalid Method</h1>')
 
 def logout_view(request):
-	if request.user.is_authenticated:
-		print('passei este if')
-		logout(request)
-
+	#if request.user.is_authenticated:
+	#	print('passei este if')
 	print('Vou fazer logout')
+	
+	logout(request)
 	return HttpResponse('<h1>Logout done</h1>')
 
 @login_required
