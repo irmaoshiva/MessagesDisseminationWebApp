@@ -31,9 +31,6 @@ from django.utils import timezone
 
 # é para tirar isto daqui pois vai para os cookies!
 
-
-
-
 client_id ='1695915081465930'
 redirect_uri = 'http://127.0.0.1:8000/app/auth/'
 request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/userdialog?client_id=' + client_id + '&redirect_uri=' + redirect_uri
@@ -43,15 +40,12 @@ secret= 'XXknAbAk2nTLFdYByKqjDXVC+k94NYc5t34EUGYAxD4qaWUB+aopdY2z/9j5oRvDoTJFpaH
 def index(request):
 	return render(request, './login.html')
 
-
-
 # def login(request):
 #	_buildx=Buildings.objects.get(id=2448131361155)
 #	print("olaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 #	_user = Users(ist_id = 'ist000', name = 'pedro', build_id=_buildx, range_user=10,lat= -15.3888, longit=-40.777)
 #	_user.save()
 #	return HttpResponse('<h1>Login Page</h1>')
-
 
 def auxiliar(request):
 	access_token=request.COOKIES.get('token')
@@ -63,12 +57,8 @@ def auxiliar(request):
 	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
 
 
-
-
 def login(request):
 	return redirect(request_url)
-
-
 
 def auth(request):
 	code = request.GET.get('code')
