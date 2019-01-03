@@ -18,3 +18,26 @@ Internet Based Systems Architecture course project
 
 -> que raio é para meter para saber em que building ta o user ? meti 100 a toa! Ver a coerencia de unidades (km's e metros).. está a toa
  
+
+-----------------
+há includes repetidos
+
+meter o router default para redirecionar para a app
+
+refresh da pagina inicial
+
+logo no html, obrigar o range a ser positivo e essas merdas
+
+meter smp a printar o range tb na pag inicial
+
+linha 160 do views, pq um for ali? (ha mais iguais no resto do codigo)
+
+%%pq é que nos cache.get se mete -1?
+%% n percebo o que é q estas linhas no final das funcoes fazem: 
+     %%%return HttpResponse(response, content_type = 'application/json')
+
+na classe mensagem n deviamos tb por o sender?
+
+-------------------------------
+mq
+pip install pika
