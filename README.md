@@ -39,5 +39,8 @@ linha 160 do views, pq um for ali? (ha mais iguais no resto do codigo)
 na classe mensagem n deviamos tb por o sender?
 
 -------------------------------
-mq
+mq:
 pip install pika
+
+celery:
+pip install Celery django-celery
