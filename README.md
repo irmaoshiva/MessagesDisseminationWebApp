@@ -24,7 +24,7 @@ há includes repetidos
 
 meter o router default para redirecionar para a app
 
-refresh da pagina inicial
+noa da para fazer refresh da pagina inicial
 
 logo no html, obrigar o range a ser positivo e essas merdas
 
