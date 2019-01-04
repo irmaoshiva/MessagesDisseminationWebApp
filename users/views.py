@@ -83,6 +83,8 @@ def auth(request):
 		_name = request_info.json().get('name')
 
 		y=cache.set(access_token,_ist_id,60*5)
+
+		print(cache.get(access_token,-1))
 		
 
 		nr={}

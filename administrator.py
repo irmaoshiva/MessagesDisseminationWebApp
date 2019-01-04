@@ -9,6 +9,9 @@ def login():
 
 	payload = {"username" : username, "password" : password}
 	r = requests.post("http://127.0.0.1:8000/admin/login/", data=payload)
+	data = r.json()
+	print(data)
+	
 
 def logout():
 	r = requests.get("http://127.0.0.1:8000/admin/logout/")
@@ -23,6 +26,9 @@ def define_buildings():
 
 		payload = {"id" : aux['id'], "name": aux['name'], "lat" : aux['lat'], "longit" : aux['longit']}
 		r = requests.post("http://127.0.0.1:8000/admin/buildings/", data=payload)
+
+def cenas():
+	r = requests.get("http://127.0.0.1:8000/admin/users/")
 
 def main():
 	login()
@@ -39,7 +45,7 @@ def main():
 
 		if command == '1':
 			print("Tou aqui 1")
-			define_buildings()
+			cenas()
 		elif command == '5':
 			print("Tou aqui 5")
 			logout()

@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, random
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -6,57 +6,72 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.core.serializers import serialize
 
+# para a cache
+from django.utils.decorators import method_decorator
+from django.core.cache import cache
+
 from management.models import Buildings, Users, Messages
 
 from pprint import pprint
 
 # Create your views here.
 
-@login_required
 def home(request):
 	print('cheguei aqui?')
 	return HttpResponse('<h1>TESTE</h1>')
 
-	#_user= Users('ist425412','leandro','2448131360897',5,38.7368263,-9.1392)
-	#_user.save()
-	#_user1= Users('ist42530','cao','2448131360897',10,45.7368263,-12.1392)
-	#_user1.save()
-	#_user2= Users('ist425000','pedro','2448131360897',10,38.7368263,-9.1392)
-	#_user2.save()
-	#_building= Buildings(id='12345',name = 'Torre do Leandro', lat = 38.818729399999995,longit = -9.1030069)
-	#_building.save()
-
-	#return HttpResponse('<h1>Admin Home</h1>')
-
 def login_view(request):
 
-	if request.user.is_authenticated:
-		print('passei este if')
-		return redirect('admin:home')
-	else:
-		if request.method == 'POST':
-			# Try to log user
-			username = request.POST['username']
-			password = request.POST['password']
+	if request.method == 'POST':
+		# Try to log user
+		username = request.POST.get('username', '')
+		password = request.POST.get('password', '')
 
-			user = authenticate(request, username=username, password=password)
+		print(username)
+		print(password)
 
-			print('fiz autenticacao')
+		if not username:
+			print("lalalal")
 
-			if user is not None:
-				login(request, user)
+		if not password:
+			print("lalalal")
 
-				print('fiz login')
+		secret = random.randint(1, 101)
+		print(secret)
 
-				return redirect('admin:home')
-			else:
-				print('login falhado')
+		while cache.get(secret, -1) != -1:
+			secret = random.randint(1, 101)
+			print(secret)
 
-				return HttpResponse('<h1>Error: Invalid Login</h1>')
+		user = authenticate(request, username = username, password = password)
+
+		print('fiz autenticacao')
+
+		if user is not None:
+			print('fiz login')
+
+			cache.set(secret, 1, 30)
+
+			print(cache.get(secret, -1))
+
+			return jsonify('Success in Login')
+
+			#return redirect('admin:home')
 		else:
-			return HttpResponse('<h1>Error: Invalid Method</h1>')
+			return 'Error in Login'
+	else:
+		return HttpResponse('<h1>Error: Invalid Method</h1>')
 
 def logout_view(request):
+	if request.method=='POST':
+		secret = request.POST.get('secret', '')
+
+		if not secret:
+			return HttpResponse('<h1>ERROR 1/h1>')
+
+		if cache.get(secret, -1) == -1:
+			return HttpResponse('<h1>ERROR 2/h1>')
+
 	#if request.user.is_authenticated:
 	#	print('passei este if')
 	print('Vou fazer logout')
@@ -64,8 +79,11 @@ def logout_view(request):
 	logout(request)
 	return HttpResponse('<h1>Logout done</h1>')
 
-@login_required
+#@login_required
+#@login_required(login_url='admin:login_view')
 def buildings(request):
+	print("tou a vir aqui!!")
+
 	if request.method == 'POST':
 		aux = request.POST
 		pprint(aux)
@@ -78,9 +96,10 @@ def buildings(request):
 		response = serialize("json", _buildings)
 		return HttpResponse(response, content_type = 'application/json')
 
-@login_required
+#@login_required
 def users(request):
 	users_dict = Users.objects.all()
+	pprint(users_dict)
 	response = serialize("json", users_dict)
 	return HttpResponse(response, content_type = 'application/json')
 
