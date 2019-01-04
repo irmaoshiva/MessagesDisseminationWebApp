@@ -4,125 +4,136 @@
 <html>
 
 
-<head>
+{% if user.flag %}
+	<head>
 
-	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
-	<script type="text/javascript">
+		<script type="text/javascript">
 
 
-			function getLocation() {
-					var x = document.getElementById("demo");
-										
+				function getLocation() {
+						var x = document.getElementById("demo");
+											
 
-			    if (navigator.geolocation) {
-			        navigator.geolocation.getCurrentPosition(showPosition);
-			    } else { 
-			        x.innerHTML = "Geolocation is not supported by this browser.";
-			    }
-			}
-
-			function showPosition(position) {
-				var y;
-				y=0;
-				var x = document.getElementById("demo");
-			    x.innerHTML = "Latitude: " + position.coords.latitude + 
-			    "<br>Longitude: " + position.coords.longitude; 
-
-			    $.ajax({
-				    type: 'POST',
-				    url: '/app/updateLocation/',
-				    data: { 
-				        'lat': position.coords.latitude, 
-				        'longit': position.coords.longitude 
-				    },
-				    success: function(msg){
-				    	y=y+1;
-				       
+				    if (navigator.geolocation) {
+				        navigator.geolocation.getCurrentPosition(showPosition);
+				    } else { 
+				        x.innerHTML = "Geolocation is not supported by this browser.";
 				    }
-				});
+				}
 
-			}
+				function showPosition(position) {
+					var y;
+					y=0;
+					var x = document.getElementById("demo");
+				    x.innerHTML = "Latitude: " + position.coords.latitude + 
+				    "<br>Longitude: " + position.coords.longitude; 
 
+				    $.ajax({
+					    type: 'POST',
+					    url: '/app/updateLocation/',
+					    data: { 
+					        'lat': position.coords.latitude, 
+					        'longit': position.coords.longitude 
+					    },
+					    success: function(msg){
+					    	y=y+1;
+					       
+					    } ,
+					    error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( errorThrown );
+                		}
 
-					var myVar;    
-					function doPeriod(){
-
-						getLocation()
-					    myVar = setTimeout(doPeriod, 5000);
-					}
-
-					$(document).ready(function(){
-					    doPeriod();
 					});
 
+				}
 
 
+						var myVar;    
+						function doPeriod(){
 
-		</script>
+							getLocation()
+						    myVar = setTimeout(doPeriod, 5000);
+						}
 
-
-
-</head>
-<body>
-  	<h1>Welcome to Messages Dissemination </h1>
-  	  
-  	  Ist_id: {{user.ist_id}}
-
-  	  <p> </p>
-  	  Name: {{user.name}} 
-
-
-	<style>
- 		 .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }
-	</style>
-	<iframe name="hiddenFrame" class="hide"></iframe>
-
-
-
-	<script >getLocation()</script>
-
-
-
-	<p id="demo"></p>
+						$(document).ready(function(){
+						    doPeriod();
+						});
 
 
 
 
-
-	<form action="{% url 'users:range' %}" method="post" target="hiddenFrame">
-		  {% csrf_token %}
-	      <p>Range</p>
-      	 <input type="numeric" name="range"><br><input type="submit"  />
-	</form>
-
-	<form  method="post" action="{% url 'users:sendMessage' %}" target="hiddenFrame">
-            {% csrf_token %}
-                <p>Insert a Message to users inside my Range:</p>
-                 <input type="text" name="message"><br> <input type="submit"  />
-	</form>
+			</script>
 
 
-	<form  method="post" action="{% url 'users:sendMessageBuild' %}" target="hiddenFrame">
-            {% csrf_token %}
-                <p>Insert a Message to users in my Building:</p>
-                 <input type="text" name="message"><br> <input type="submit"  />
-	</form>
 
+	</head>
+	<body>
+	  	<h1>Welcome to Messages Dissemination </h1>
+	  	  
+	  	  Ist_id: {{user.ist_id}}
+
+	  	  <p> </p>
+	  	  Name: {{user.name}} 
+
+
+		<style>
+	 		 .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }
+		</style>
+		<iframe name="hiddenFrame" class="hide"></iframe>
+
+
+
+		<script >getLocation()</script>
+
+
+
+		<p id="demo"></p>
+
+
+
+
+
+		<form action="{% url 'users:range' %}" method="post" target="hiddenFrame">
+			  {% csrf_token %}
+		      <p>Range</p>
+	      	 <input type="numeric" name="range"><br><input type="submit"  />
+		</form>
+
+		<form  method="post" action="{% url 'users:sendMessage' %}" target="hiddenFrame">
+	            {% csrf_token %}
+	                <p>Insert a Message to users inside my Range:</p>
+	                 <input type="text" name="message"><br> <input type="submit"  />
+		</form>
+
+
+		<form  method="post" action="{% url 'users:sendMessageBuild' %}" 
+	            {% csrf_token %}
+	                <p>Insert a Message to users in my Building:</p>
+	                 <input type="text" name="message"><br> <input type="submit"  />
+		</form>
+
+		
+
+
+		<form  method="post" action="{% url 'users:logout' %}">
+	            {% csrf_token %}
+	            <br>
+	            <input type="submit" value="Lougout" />
+		</form>
+
+
+
+	</body>
+{% else %}
 	
+	<body>
+  	<h1>Welcome to MessagesDissemination </h1>
+  	<a href="{% url 'users:login' %}">Login</a>
+	</body>
+{% endif %}
 
 
-	<form  method="post" action="{% url 'users:logout' %}">
-            {% csrf_token %}
-            <br>
-            <input type="submit" value="Lougout" />
-	</form>
-
-
-
-
-
-
-</body>
 </html>
 
