@@ -27,89 +27,98 @@ def login_view(request):
 		username = request.POST.get('username', '')
 		password = request.POST.get('password', '')
 
-		print(username)
-		print(password)
-
-		if not username:
-			print("lalalal")
-
-		if not password:
-			print("lalalal")
-
-		secret = random.randint(1, 101)
-		print(secret)
-
-		while cache.get(secret, -1) != -1:
+		while True:
 			secret = random.randint(1, 101)
-			print(secret)
+			print('Secret no login: ' + str(secret) + '\n')
+
+			if cache.get(secret, -1) == -1:
+				break
 
 		user = authenticate(request, username = username, password = password)
 
-		print('fiz autenticacao')
+		print('fiz autenticacao\n')
 
 		if user is not None:
-			print('fiz login')
+			print('fiz login\n')
 
 			cache.set(secret, 1, 30)
 
-			print(cache.get(secret, -1))
+			print('Cache no login: ' + str(cache.get(secret, -1)) + '\n')
 
-			return jsonify('Success in Login')
-
-			#return redirect('admin:home')
+			return JsonResponse({'secret': secret})
 		else:
-			return 'Error in Login'
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
 	else:
-		return HttpResponse('<h1>Error: Invalid Method</h1>')
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+def check_authentication(request):
+	secret = request.POST.get('secret', '')
+	print('Secret na autenticação: ' + str(secret) + '\n')
+
+	if not secret:
+		return 0
+
+	print('Cache na autenticação: ' + str(cache.get(secret, -1)) + '\n')
+
+	if cache.get(secret, -1) == -1:
+		return 0
+
+	return secret
 
 def logout_view(request):
-	if request.method=='POST':
-		secret = request.POST.get('secret', '')
+	if request.method == 'POST': 
+		secret = check_authentication(request)
 
-		if not secret:
-			return HttpResponse('<h1>ERROR 1/h1>')
+		if secret:
+			print(secret)
+			cache.delete(secret)
+			return HttpResponse("Logout Done", content_type = "text/plain")
+		else:
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
+	else:
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
 
-		if cache.get(secret, -1) == -1:
-			return HttpResponse('<h1>ERROR 2/h1>')
-
-	#if request.user.is_authenticated:
-	#	print('passei este if')
-	print('Vou fazer logout')
-	
-	logout(request)
-	return HttpResponse('<h1>Logout done</h1>')
-
-#@login_required
-#@login_required(login_url='admin:login_view')
 def buildings(request):
-	print("tou a vir aqui!!")
-
 	if request.method == 'POST':
-		aux = request.POST
-		pprint(aux)
-		_building = Buildings(id = aux['id'], name = aux['name'], lat = aux['lat'], longit = aux['longit'])
+		if check_authentication(request) == 0:
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
+
+		_id = request.POST.get('id', '')
+		_name = request.POST.get('name', '')
+		_lat = request.POST.get('lat', '')
+		_longit = request.POST.get('longit', '')
+
+		_building = Buildings(id = _id, name = _name, lat = _lat, longit = _longit)
 		_building.save()
 
-		return HttpResponse('<h1>SHOW ALL BUILDINGS</h1>')
+		return HttpResponse("Building Inserted", content_type = "text/plain")
 	else:
-		_buildings = Buildings.objects.all()	
-		response = serialize("json", _buildings)
-		return HttpResponse(response, content_type = 'application/json')
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
 
-#@login_required
 def users(request):
-	users_dict = Users.objects.all()
-	pprint(users_dict)
-	response = serialize("json", users_dict)
-	return HttpResponse(response, content_type = 'application/json')
+	if request.method == 'POST':
+		if check_authentication(request) == 0:
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
 
-@login_required
-def listUsersInBuilding(request, num):
-	_users= Users.objects.filter(build_id=num)
-	response = serialize("json", _users)	
-	return HttpResponse(response, content_type = 'application/json')
+		_users = Users.objects.all()
+		response = serialize("json", _users)
+		pprint(response)
+		return HttpResponse(response, content_type = 'application/json')
+	else:
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
 
+def listUsersInBuilding(request):
+	if request.method == 'POST':
+		if check_authentication(request) == 0:
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
 
+		_build_id = request.POST.get('build_id', '')
+
+		_users = Users.objects.filter(build_id = _build_id)
+		response = serialize("json", _users)	
+		return HttpResponse(response, content_type = 'application/json')
+	else:
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
 
 
 def buildingsNum(request, num):
