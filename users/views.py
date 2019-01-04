@@ -158,6 +158,7 @@ def range(request):
 		if request.method == 'POST':
 			_range= request.POST.get('range', '')
 			Users.objects.filter(ist_id=ist_id).update(range_user = _range)
+			return HttpResponse(status=204)
 	return HttpResponse('<p>Nothing to show</p>')		
 
 
@@ -251,10 +252,11 @@ def sendMessage(request):
 				if checkDistance(item.lat,_lat,item.longit,_longit,_range)==1:
 					_message=Messages(content=_content,receiver=item,date=now())
 					_message.save()
-				
-		allMessages=Messages.objects.all()
-		response = serialize("json", allMessages)
-		return HttpResponse(response, content_type = 'application/json')
+			return HttpResponse(status=204)
+		else:	
+			allMessages=Messages.objects.all()
+			response = serialize("json", allMessages)
+			return HttpResponse(response, content_type = 'application/json')
 
 
 # ESTE NÃO ESTÁ TESTADO!!!
@@ -272,14 +274,15 @@ def sendMessageBuild(request):
 			_data= Users.objects.filter(ist_id=ist_id)
 			for aux in _data:
 				_build_id=aux.build_id
-				
-		# Q is to exclude the user with this ist_id
-			_allUsers=Users.objects.all().filter(~Q(ist_id=ist_id))
+			if (_build_id!= -1):
+			# Q is to exclude the user with this ist_id
+				_allUsers=Users.objects.all().filter(~Q(ist_id=ist_id))
 
-			for item in _allUsers:
-				if item.build_id==_build_id:
-					_message=Messages(content=_content,receiver=item,date=now())
-					_message.save()
+				for item in _allUsers:
+					if item.build_id==_build_id:
+						_message=Messages(content=_content,receiver=item,date=now())
+						_message.save()
+			return HttpResponse(status=204)
 				
 		allMessages=Messages.objects.all()
 		response = serialize("json", allMessages)
@@ -320,18 +323,11 @@ def updateLocation(request):
 			print(_longit)
 			_build_id = checkBuilding(_lat,_longit)
 			Users.objects.filter(ist_id=_ist_id).update(lat = _lat, longit = _longit, build_id= _build_id)
+			return HttpResponse(status=204)
 	return HttpResponse('<p>Nothing to show</p>')		
 
 
 
-
-
-# def login(request):
-#	_buildx=Buildings.objects.get(id=2448131361155)
-#	print("olaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-#	_user = Users(ist_id = 'ist000', name = 'pedro', build_id=_buildx, range_user=10,lat= -15.3888, longit=-40.777)
-#	_user.save()
-#	return HttpResponse('<h1>Login Page</h1>')
 
 
 

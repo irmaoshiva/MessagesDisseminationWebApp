@@ -87,31 +87,34 @@
 
 		<script >getLocation()</script>
 
-
-
 		<p id="demo"></p>
 
 
 
 
 
-		<form action="{% url 'users:range' %}" method="post" target="hiddenFrame">
+		<form action="{% url 'users:range' %}" method="post" >
 			  {% csrf_token %}
-		      <p>Range</p>
-	      	 <input type="numeric" name="range"><br><input type="submit"  />
+		      <p>Range	      	 <input type="number" min="0" name="range" required ><br><input type="submit"  /> </p>
 		</form>
 
-		<form  method="post" action="{% url 'users:sendMessage' %}" target="hiddenFrame">
+			<h4> Who is nearby me on: </h4>
+
+		<a href="{% url 'users:nearbyBuilding' %}">myBuilding</a>    <a href="{% url 'users:nearbyRange' %}">myRange</a> </h4>
+
+
+
+		<form  method="post" action="{% url 'users:sendMessage' %}" >
 	            {% csrf_token %}
-	                <p>Insert a Message to users inside my Range:</p>
-	                 <input type="text" name="message"><br> <input type="submit"  />
+	                <p>Insert a Message to users inside my Range:
+	                 <input type="text" name="message"><br> <input type="submit"  /> </p>
 		</form>
 
 
-		<form  method="post" action="{% url 'users:sendMessageBuild' %}" 
+		<form  method="post" action="{% url 'users:sendMessageBuild' %}" >
 	            {% csrf_token %}
-	                <p>Insert a Message to users in my Building:</p>
-	                 <input type="text" name="message"><br> <input type="submit"  />
+	                <p>Insert a Message to users in my Building:
+	                 <input type="text" name="message" ><br> <input type="submit"  /> </p>
 		</form>
 
 		
@@ -123,6 +126,9 @@
 	            <input type="submit" value="Lougout" />
 		</form>
 
+
+
+	
 
 
 	</body>
