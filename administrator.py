@@ -13,9 +13,13 @@ def login():
 
 		print('Status: ' + str(r.status_code) + '\n')
 
-		if r.status_code == 200:
-			print('Login Successful\n')
-			break
+		if r.status_code == 401:
+			print('Error: Invalid Login\n')
+			main()
+			return
+		elif r.status_code != 200:
+			print('Error Accessing\n')
+			return
 
 		print('Message: ' + r.text + '\n')
 
@@ -41,8 +45,12 @@ def defineBuildings(secret):
 		print('Status: ' + str(r.status_code) + '\n')
 		print('Message: ' + r.text + '\n')
 
-		if r.status_code != 200:
+		if r.status_code == 401:
+			print('Error: Invalid Login\n')
 			main()
+			return
+		elif r.status_code != 200:
+			print('Error Accessing\n')
 			return
 
 def allUsers(secret):
@@ -53,9 +61,12 @@ def allUsers(secret):
 
 	print('Status: ' + str(r.status_code) + '\n')
 
-	if r.status_code != 200:
-		print('Error Accessing\n')
+	if r.status_code == 401:
+		print('Error: Invalid Login\n')
 		main()
+		return
+	elif r.status_code != 200:
+		print('Error Accessing\n')
 		return
 
 	data = r.json()
@@ -79,9 +90,12 @@ def buildingUsers(secret):
 
 	print('Status: ' + str(r.status_code) + '\n')
 
-	if r.status_code != 200:
-		print('Error Accessing\n')
+	if r.status_code == 401:
+		print('Error: Invalid Login\n')
 		main()
+		return
+	elif r.status_code != 200:
+		print('Error Accessing\n')
 		return
 
 	data = r.json()
@@ -91,6 +105,30 @@ def buildingUsers(secret):
 		print('IST ID: ' + aux['pk'])
 		print('Name: ' + aux['fields']['name'] + '\n')
 		i = i + 1
+
+def registerBot(secret):
+	pprint(secret)
+
+	print("Building ID:")
+	build_id = input("> ")
+
+	payload = {"secret" : secret['secret'], "build_id" : build_id}
+
+	r = requests.post("http://127.0.0.1:8000/admin/bots/", data = payload)
+
+	print('Status: ' + str(r.status_code) + '\n')
+
+	if r.status_code == 401:
+		print('Error: Invalid Login\n')
+		main()
+		return
+	elif r.status_code != 200:
+		print('Error Accessing\n')
+		return
+
+	data = r.json()
+
+	print('Bot ID: ' + str(data['bot_id']))
 
 def logout(secret):
 
@@ -131,6 +169,10 @@ def main():
 		elif command == '3':
 			print('Tou aqui 3\n')			
 			buildingUsers(secret)
+
+		elif command == '5':
+			print('Tou aqui 5\n')			
+			registerBot(secret)
 
 		elif command == '6':
 			print('Tou aqui 6\n')			

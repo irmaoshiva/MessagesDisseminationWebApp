@@ -24,7 +24,6 @@ class Users(models.Model):
 	def __str__(self):
 		return self.ist_id
 
-
 class Messages(models.Model):
 	content = models.CharField(max_length = 255)
 	receiver = models.ForeignKey(Users, on_delete = models.CASCADE)
@@ -32,3 +31,10 @@ class Messages(models.Model):
 
 	def __str__(self):
 		return self.content
+
+class Bots(models.Model):
+	id = models.CharField(max_length = 255, primary_key = True)
+	build_id = models.CharField(max_length = 255)
+
+	def __str__(self):
+		return self.id

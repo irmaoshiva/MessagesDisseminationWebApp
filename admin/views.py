@@ -10,15 +10,11 @@ from django.core.serializers import serialize
 from django.utils.decorators import method_decorator
 from django.core.cache import cache
 
-from management.models import Buildings, Users, Messages
+from management.models import Buildings, Users, Messages, Bots
 
 from pprint import pprint
 
 # Create your views here.
-
-def home(request):
-	print('cheguei aqui?')
-	return HttpResponse('<h1>TESTE</h1>')
 
 def login_view(request):
 
@@ -65,22 +61,9 @@ def check_authentication(request):
 
 	return secret
 
-def logout_view(request):
-	if request.method == 'POST': 
-		secret = check_authentication(request)
-
-		if secret:
-			print(secret)
-			cache.delete(secret)
-			return HttpResponse("Logout Done", content_type = "text/plain")
-		else:
-			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
-	else:
-		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
-
 def buildings(request):
 	if request.method == 'POST':
-		if check_authentication(request) == 0:
+		if not check_authentication(request):
 			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
 
 		_id = request.POST.get('id', '')
@@ -97,7 +80,7 @@ def buildings(request):
 
 def users(request):
 	if request.method == 'POST':
-		if check_authentication(request) == 0:
+		if not check_authentication(request):
 			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
 
 		_users = Users.objects.all()
@@ -109,7 +92,7 @@ def users(request):
 
 def listUsersInBuilding(request):
 	if request.method == 'POST':
-		if check_authentication(request) == 0:
+		if not check_authentication(request):
 			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
 
 		_build_id = request.POST.get('build_id', '')
@@ -119,6 +102,54 @@ def listUsersInBuilding(request):
 		return HttpResponse(response, content_type = 'application/json')
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+def registerBot(request):
+	if request.method == 'POST':
+		if not check_authentication(request):
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
+
+		while True:
+			_bot_id = random.randint(1, 101)
+			print('Bot ID: ' + str(_bot_id) + '\n')
+
+			if Bots.objects.filter(id = _bot_id) is not None:
+				break
+
+		_build_id = request.POST.get('build_id', '')
+
+		_bots = Bots(id = _bot_id, build_id = _build_id)
+		_bots.save()
+
+		return JsonResponse({'bot_id': _bot_id})
+	else:
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+
+def logout_view(request):
+	if request.method == 'POST': 
+		secret = check_authentication(request)
+
+		if secret:
+			print(secret)
+			cache.delete(secret)
+			return HttpResponse("Logout Done", content_type = "text/plain")
+		else:
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
+	else:
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def buildingsNum(request, num):
