@@ -3,7 +3,6 @@ from django.utils import timezone
 
 # Create your models here.
 
-
 class Buildings(models.Model):
 	id = models.CharField(max_length = 255, primary_key = True)
 	name = models.CharField(max_length = 255)
@@ -39,7 +38,6 @@ class Messages(models.Model):
 	date = models.DateTimeField(default = timezone.now)
 	sender = models.CharField(max_length = 255)
 	build_id =  models.CharField(max_length = 255)
-
 
 	def __str__(self):
 		return self.content

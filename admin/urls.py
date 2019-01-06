@@ -15,6 +15,8 @@ urlpatterns = [
     path('bots/messages/', csrf_exempt(views.sendMessagesBot), name = 'send_messages_bot'),
     path('logs/movements/user', csrf_exempt(views.logMovementsUser), name = 'log_movements_user'),
     path('logs/movements/building', csrf_exempt(views.logMovementsBuilding), name = 'log_movements_building'),
+    path('logs/messages/user', csrf_exempt(views.logMessagesUser), name = 'log_messages_user'),
+    path('logs/messages/building', csrf_exempt(views.logMessagesBuilding), name = 'log_messages_building'),
 
     path('buildings/<int:num>/', csrf_exempt(views.buildingsNum), name = 'buildingsNum'),
     path('users/<str:ist_id>/', csrf_exempt(views.oneUser), name = 'oneUser'),

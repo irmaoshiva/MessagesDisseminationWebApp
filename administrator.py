@@ -246,6 +246,89 @@ def logMovements(secret):
 		else:
 			print('Insert a valid command!\n')
 
+def logMessagesUser(secret):
+	i = 0
+	pprint(secret)
+
+	print("IST ID:")
+	ist_id = input("> ")
+
+	payload = {"secret" : secret['secret'], "ist_id" : ist_id}
+
+	r = requests.post("http://127.0.0.1:8000/admin/logs/messages/user", data = payload)
+
+	print('Status: ' + str(r.status_code) + '\n')
+
+	if r.status_code == 401:
+		print('Error: Invalid Login\n')
+		main()
+		return
+	elif r.status_code != 200:
+		print(r.text + '\n')
+		return
+
+	data = r.json()
+
+	pprint(data)
+
+	for aux in data:
+		print("MESSAGE " + str(i))
+		print('Content: ' + aux['fields']['content'])
+		print('Building ID: ' + aux['fields']['build_id'])
+		print('Date: ' + aux['fields']['date'] + '\n')
+		i = i + 1
+
+def logMessagesBuilding(secret):
+	i = 0
+	pprint(secret)
+
+	print("Building ID:")
+	build_id = input("> ")
+
+	payload = {"secret" : secret['secret'], "build_id" : build_id}
+
+	r = requests.post("http://127.0.0.1:8000/admin/logs/messages/building", data = payload)
+
+	print('Status: ' + str(r.status_code) + '\n')
+
+	if r.status_code == 401:
+		print('Error: Invalid Login\n')
+		main()
+		return
+	elif r.status_code != 200:
+		print(r.text + '\n')
+		return
+
+	data = r.json()
+
+	pprint(data)
+
+	for aux in data:
+		print("MESSAGE " + str(i))
+		print('Content: ' + aux['fields']['content'])
+		print('Building ID: ' + aux['fields']['build_id'])
+		print('Date: ' + aux['fields']['date'] + '\n')
+		i = i + 1
+
+def logMessages(secret):
+	while True:
+		print("Filter:")
+		print("(1) - User")
+		print("(2) - Building")
+		
+		command = input('>> ')
+
+		if command == '1':
+			logMessagesUser(secret)
+			return
+
+		elif command == '2':
+			logMessagesBuilding(secret)
+			return
+
+		else:
+			print('Insert a valid command!\n')
+
 def logout(secret):
 
 	pprint(secret)
@@ -287,6 +370,9 @@ def main():
 
 		elif command == '4':
 			logMovements(secret)
+
+		elif command == '5':
+			logMessages(secret)
 
 		elif command == '6':
 			registerBot(secret)

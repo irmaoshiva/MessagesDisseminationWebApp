@@ -48,7 +48,7 @@ def sendMessages(request):
 				return HttpResponse("Error: No Users in that Building", content_type = "text/plain", status = 400)
 
 			for item in _allUsers:
-				_message = Messages(content = _content, receiver = item, date = now())
+				_message = Messages(content = _content, receiver = item, date = now(), sender = "BOT : " + _bot_id, build_id = _build_id)
 				_message.save()
 
 			if counter == int(_number):
