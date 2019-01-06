@@ -20,8 +20,11 @@ def login():
 		elif r.status_code != 200:
 			print('Error Accessing\n')
 			return
+		else:
+			print('Login Successful\n')
+			break
 
-		print('Message: ' + r.text + '\n')
+		print(r.text + '\n')
 
 	secret = r.json()
 	print('Secret: ' + str(secret['secret']) + '\n')
@@ -36,8 +39,6 @@ def defineBuildings(secret):
 	buildings_dict = buildings_dict['containedSpaces']
 
 	for aux in buildings_dict:
-		pprint(aux)
-
 		payload = {"secret" : secret['secret'], "id" : aux['id'], "name": aux['name'], "lat" : aux['lat'], "longit" : aux['longit']}
 		pprint(payload)
 		r = requests.post("http://127.0.0.1:8000/admin/buildings/", data=payload)
@@ -123,12 +124,40 @@ def registerBot(secret):
 		main()
 		return
 	elif r.status_code != 200:
-		print('Error Accessing\n')
+		print(r.text + '\n')
 		return
 
 	data = r.json()
 
 	print('Bot ID: ' + str(data['bot_id']))
+
+def sendMessagesBot(secret):
+	pprint(secret)
+
+	print("Building ID:")
+	build_id = input("> ")
+	print("Message:")
+	message = input("> ")
+	print("Number:")
+	number = input("> ")
+	print("Periodicity:")
+	periodicity = input("> ")
+
+	payload = {"secret" : secret['secret'], "build_id" : build_id, "message" : message, "number" : number, "periodicity" : periodicity}
+
+	r = requests.post("http://127.0.0.1:8000/admin/bots/messages/", data = payload)
+
+	print('Status: ' + str(r.status_code) + '\n')
+
+	if r.status_code == 401:
+		print('Error: Invalid Login\n')
+		main()
+		return
+	elif r.status_code != 200:
+		print(r.text + '\n')
+		return
+
+	print(r.text + '\n')
 
 def logout(secret):
 
@@ -154,7 +183,8 @@ def main():
 		print("(3) - List all users that are inside a certain buiding")
 		print("(4) - List the history of all the user movements and exchanged messages this list can be configured with a simple query to select the user or building")
 		print("(5) - Register a new bot")
-		print("(6) - Logout")
+		print("(6) - Run a bot")
+		print("(10) - Logout")
 
 		command = input('>> ')
 
@@ -176,6 +206,10 @@ def main():
 
 		elif command == '6':
 			print('Tou aqui 6\n')			
+			sendMessagesBot(secret)
+
+		elif command == '10':
+			print('Tou aqui 10\n')			
 			logout(secret)
 
 		else:

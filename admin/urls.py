@@ -12,6 +12,7 @@ urlpatterns = [
     path('users/', csrf_exempt(views.users), name = 'users'),
     path('building/users/', csrf_exempt(views.listUsersInBuilding), name = 'users_building'),
     path('bots/', csrf_exempt(views.registerBot), name = 'register_bot'),
+    path('bots/messages/', csrf_exempt(views.sendMessagesBot), name = 'send_messages_bot'),
 
 
     path('buildings/<int:num>/', csrf_exempt(views.buildingsNum), name = 'buildingsNum'),

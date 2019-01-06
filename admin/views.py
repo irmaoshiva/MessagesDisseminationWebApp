@@ -1,4 +1,4 @@
-import requests, json, random
+import requests, json, random, time
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -17,7 +17,6 @@ from pprint import pprint
 # Create your views here.
 
 def login_view(request):
-
 	if request.method == 'POST':
 		# Try to log user
 		username = request.POST.get('username', '')
@@ -112,10 +111,13 @@ def registerBot(request):
 			_bot_id = random.randint(1, 101)
 			print('Bot ID: ' + str(_bot_id) + '\n')
 
-			if Bots.objects.filter(id = _bot_id) is not None:
+			if not Bots.objects.filter(id = _bot_id):
 				break
 
 		_build_id = request.POST.get('build_id', '')
+
+		if not Buildings.objects.filter(id = _build_id):
+			return HttpResponse("Error: Invalid Building", content_type = "text/plain", status = 400)
 
 		_bots = Bots(id = _bot_id, build_id = _build_id)
 		_bots.save()
@@ -123,6 +125,78 @@ def registerBot(request):
 		return JsonResponse({'bot_id': _bot_id})
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+def sendMessagesBot(request):
+	if request.method == 'POST':
+		if not check_authentication(request):
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
+
+		_build_id = request.POST.get('build_id', '')
+		if not Buildings.objects.filter(id = _build_id):
+			return HttpResponse("Error: Invalid Building", content_type = "text/plain", status = 400)
+
+		if not Bots.objects.filter(build_id = _build_id):
+			return HttpResponse("Error: Don't exists Bot in that Building", content_type = "text/plain", status = 400)
+
+		_content = request.POST.get('message', '')
+		if not _content:
+			return HttpResponse("Error: Empty Message", content_type = "text/plain", status = 400)
+
+		_number = request.POST.get('number', '')
+		if not _number:
+			_number = '1'
+
+		_periodicity = request.POST.get('periodicity', '')
+		if not _periodicity:
+			_periodicity = '0'
+
+		while True:
+			_allUsers = Users.objects.filter(build_id = _build_id)
+			for item in _allUsers:
+				_message = Messages(content = _content, receiver = item, date = now())
+				_message.save()
+
+			if counter == int(_number):
+				break
+			counter = counter + 1
+			time.sleep(int(_periodicity))
+
+		return HttpResponse("Bot Done", content_type = "text/plain")
+	else:
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+def sendMessageBuild(request):
+	access_token=request.COOKIES.get('token')
+	ist_id=cache.get(access_token,-1)
+	if ist_id==-1:
+		response= redirect('users:home')
+		response.delete_cookie('token')
+		print("xeeeeeeeeeee")
+		return response
+	else:
+		if request.method == 'POST':
+			_content=request.POST.get('message', '')
+			_data= Users.objects.filter(ist_id=ist_id)
+			for aux in _data:
+				_build_id=aux.build_id
+			if (_build_id!= -1):
+			# Q is to exclude the user with this ist_id
+				_allUsers=Users.objects.all().filter(~Q(ist_id=ist_id))
+
+				for item in _allUsers:
+					if item.build_id==_build_id:
+						_message=Messages(content=_content,receiver=item,date=now())
+						_message.save()
+			return HttpResponse(status=204)
+				
+		allMessages=Messages.objects.all()
+		response = serialize("json", allMessages)
+		return HttpResponse(response, content_type = 'application/json')
+
+
+
+
+
 
 
 def logout_view(request):
