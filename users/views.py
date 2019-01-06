@@ -76,6 +76,8 @@ def auxiliar(request):
 	print("access_token")
 	print(access_token)
 	x=cache.get(access_token,-1)
+	_user= Users(ist_id = 'ist422433', name= 'johny', build_id='1', range_user = 100, lat=38.8187905, longit= -9.1029637)
+	_user.save()
 	_allUsers=Users.objects.all()
 	for item in _allUsers:
 		print("caraliuuuus")
@@ -207,11 +209,12 @@ def nearbyRange(request):
 		for item in _allUsers:
 			if checkDistance(item.lat,_lat,item.longit,_longit,_range)==1:
 				print(item.ist_id)
-				nearMe.append(item.ist_id)
+				nearMe.append({'ist_id':item.ist_id})
+
 				print('laaakjlkjlkjl')	
 
-		response = serialize("json", nearMe)
-		return HttpResponse(response, content_type = 'application/json')
+		#response = serialize("json", nearMe)
+		return HttpResponse(nearMe, content_type = 'application/json')
 	
 
 
