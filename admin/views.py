@@ -10,9 +10,12 @@ from django.core.serializers import serialize
 from django.utils.decorators import method_decorator
 from django.core.cache import cache
 
-from management.models import Buildings, Users, Messages, Bots
+from django.utils.timezone import now
+
+from management.models import Buildings, Users, LogsMovements, Messages, Bots
 
 from pprint import pprint
+
 
 # Create your views here.
 
@@ -36,7 +39,7 @@ def login_view(request):
 		if user is not None:
 			print('fiz login\n')
 
-			cache.set(secret, 1, 30)
+			cache.set(secret, 1, 60*5)
 
 			print('Cache no login: ' + str(cache.get(secret, -1)) + '\n')
 
@@ -104,6 +107,13 @@ def listUsersInBuilding(request):
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
 
+import random, string
+
+def randomword():
+   letters = string.ascii_lowercase
+   return ''.join(random.choice(letters) for i in range(8))
+
+
 def registerBot(request):
 	if request.method == 'POST':
 		if not check_authentication(request):
@@ -120,14 +130,18 @@ def registerBot(request):
 		if not Buildings.objects.filter(id = _build_id):
 			return HttpResponse("Error: Invalid Building", content_type = "text/plain", status = 400)
 
-		_bots = Bots(id = _bot_id, build_id = _build_id)
+		_password = randomword()
+
+		_bots = Bots(id = _bot_id, build_id = _build_id, password = _password)
 		_bots.save()
 
-		return JsonResponse({'bot_id': _bot_id})
+		return JsonResponse({'bot_id': _bot_id, 'build_id': _build_id, 'password': _password})
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
 
 def sendMessagesBot(request):
+	counter = 1
+
 	if request.method == 'POST':
 		if not check_authentication(request):
 			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
@@ -204,6 +218,21 @@ def logMovementsBuilding(request):
 		return HttpResponse(response, content_type = 'application/json')
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+#def logMovementsUser(request):
+#	if request.method == 'POST':
+#		if not check_authentication(request):
+#			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
+#
+#		_ist_id = request.POST.get('ist_id', '')
+#		if not Users.objects.filter(ist_id = _ist_id):
+#			return HttpResponse("Error: Invalid User", content_type = "text/plain", status = 400)
+#
+#		_logs = Messages.objects.filter(ist_id = _ist_id)
+#		response = serialize("json", _logs)	
+#		return HttpResponse(response, content_type = 'application/json')
+#	else:
+#		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
 
 
 def logout_view(request):

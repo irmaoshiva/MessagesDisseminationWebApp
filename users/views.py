@@ -30,9 +30,6 @@ from django.utils import timezone
 
 
 
-
-
-
 client_id ='1695915081465930'
 redirect_uri = 'http://127.0.0.1:8000/app/auth/'
 request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/userdialog?client_id=' + client_id + '&redirect_uri=' + redirect_uri
@@ -305,12 +302,6 @@ def checkBuilding(_latUser,_longitUser):
 	
 
 def updateLocation(request):
-	
-	_last_build = 0
-
-
-
-
 	access_token=request.COOKIES.get('token')
 	print(access_token)
 	_ist_id=cache.get(access_token,-1)
@@ -333,25 +324,22 @@ def updateLocation(request):
 			print("longit")
 			print(_longit)
 			_build_id = checkBuilding(_lat,_longit)
-			
-			
 
-			if _last_build == _build_id:
-				Users.objects.filter(ist_id=_ist_id).update(lat = _lat, longit = _longit)
-			else:
-				Users.objects.filter(ist_id = _ist_id).update(lat = _lat, longit = _longit, build_id = _build_id)
-				if not LogsMovements.objects.filter(ist_id = _ist_id):
-					_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now())
-					_logs.save()
+			_user =  Users.objects.filter(ist_id = _ist_id)
+
+			for item in _user:
+				if _build_id == item.build_id:
+					Users.objects.filter(ist_id=_ist_id).update(lat = _lat, longit = _longit)
 				else:
-					LogsMovements.objects.filter(ist_id = _ist_id).update(end = now())
-					if _build_id != -1:
+					Users.objects.filter(ist_id = _ist_id).update(lat = _lat, longit = _longit, build_id = _build_id)
+					if not LogsMovements.objects.filter(ist_id = _ist_id):
 						_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now())
 						_logs.save()
-					
-			_last_build = _build_id
-			
-			
+					else:
+						LogsMovements.objects.filter(ist_id = _ist_id).filter(build_id = item.build_id).update(end = now())
+						if _build_id != -1:
+							_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now())
+							_logs.save()
 
 			return HttpResponse(status=204)
 	return HttpResponse('<p>Nothing to show</p>')	
@@ -359,17 +347,17 @@ def updateLocation(request):
 
 def getMessages(request):
 	access_token=request.COOKIES.get('token')
-	print(access_token)
+	#print(access_token)
 	_ist_id=cache.get(access_token,-1)
-	print(_ist_id)
+	#print(_ist_id)
 	if _ist_id == -1:
 		response= redirect('users:home')
 		response.delete_cookie('token')
-		print("xeeeeeeeeeee")
+		#print("xeeeeeeeeeee")
 		return response
 	else:
 		if request.method=='GET':
-			print("geeeeeeeeeeeeeeeeeeeeeeeeeeeet")
+			#print("geeeeeeeeeeeeeeeeeeeeeeeeeeeet")
 			allMessages=Messages.objects.filter(receiver=_ist_id)
 
 			messages= []

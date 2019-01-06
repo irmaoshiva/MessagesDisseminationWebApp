@@ -44,6 +44,7 @@ class Messages(models.Model):
 class Bots(models.Model):
 	id = models.CharField(max_length = 255, primary_key = True)
 	build_id = models.CharField(max_length = 255)
+	password = models.CharField(max_length = 9)
 
 	def __str__(self):
 		return self.id

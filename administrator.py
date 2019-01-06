@@ -130,6 +130,8 @@ def registerBot(secret):
 	data = r.json()
 
 	print('Bot ID: ' + str(data['bot_id']))
+	print('Building ID: ' + str(data['build_id']))
+	print('Password: ' + str(data['password']) + '\n')
 
 def sendMessagesBot(secret):
 	pprint(secret)
@@ -184,13 +186,13 @@ def logMovementsUser(secret):
 
 	pprint(data)
 
-	for aux in data:
-		print("MOVEMENT " + str(i))
-		print('IST ID: ' + aux['ist_id'])
-		print('Building ID: ' + aux['build_id'])
-		print('Entry Date: ' + aux['start'])
-		print('Building ID: ' + aux['end'] + '\n')
-		i = i + 1
+	#for aux in data:
+	#	print("MOVEMENT " + str(i))
+	#	print('IST ID: ' + aux['ist_id'])
+	#	print('Building ID: ' + aux['build_id'])
+	#	print('Entry Date: ' + aux['start'])
+	#	print('Exit Date: ' + aux['end'] + '\n')
+	#	i = i + 1
 
 def logMovementsBuilding(secret):
 	i = 0
@@ -234,12 +236,12 @@ def logMovements(secret):
 		command = input('>> ')
 
 		if command == '1':
-			print('Tou aqui 1\n')
 			logMovementsUser(secret)
+			return
 
 		elif command == '2':
-			print('Tou aqui 2\n')			
 			allUsers(secret)
+			return
 
 		else:
 			print('Insert a valid command!\n')
@@ -266,35 +268,33 @@ def main():
 		print("(1) - Define builds and their locations (latitude, longitude)")
 		print("(2) - List all users that are logged-in into the system")
 		print("(3) - List all users that are inside a certain buiding")
-		print("(4) - List the history of all the user movements and exchanged messages this list can be configured with a simple query to select the user or building")
-		print("(5) - Register a new bot")
-		print("(6) - Run a bot")
+		print("(4) - List the history of all the user movements")
+		print("(5) - List the history of all the exchanged messages")
+		print("(6) - Register a new bot")
+		print("(7) - Run a bot")
 		print("(10) - Logout")
 
 		command = input('>> ')
 
 		if command == '1':
-			print('Tou aqui 1\n')
 			defineBuildings(secret)
 
 		elif command == '2':
-			print('Tou aqui 2\n')			
 			allUsers(secret)
 
 		elif command == '3':
-			print('Tou aqui 3\n')			
 			buildingUsers(secret)
 
-		elif command == '5':
-			print('Tou aqui 5\n')			
-			registerBot(secret)
+		elif command == '4':
+			logMovements(secret)
 
 		elif command == '6':
-			print('Tou aqui 6\n')			
+			registerBot(secret)
+
+		elif command == '7':
 			sendMessagesBot(secret)
 
 		elif command == '10':
-			print('Tou aqui 10\n')			
 			logout(secret)
 
 		else:
