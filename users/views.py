@@ -76,8 +76,12 @@ def auxiliar(request):
 	print("access_token")
 	print(access_token)
 	x=cache.get(access_token,-1)
-	print("ist id é")
-	print(x)
+	_allUsers=Users.objects.all()
+	for item in _allUsers:
+		print("caraliuuuus")
+		_message=Messages(content='olaaaa',receiver=item,date=now())
+		_message.save()
+
 	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
 
 
@@ -110,8 +114,8 @@ def auth(request):
 		_ist_id = request_info.json().get('username')
 		_name = request_info.json().get('name')
 
-		y=cache.set(access_token,_ist_id,60*1)
-		z=cache.set(access_token+_ist_id,_name,60*1)
+		y=cache.set(access_token,_ist_id,60*15)
+		z=cache.set(access_token+_ist_id,_name,60*15)
 		
 
 
@@ -217,7 +221,6 @@ def nearbyBuilding(request):
 	if ist_id==-1:
 		response= redirect('users:home')
 		response.delete_cookie('token')
-		print("xeeeeeeeeeee")
 		return response
 	else:
 		_me=Users.objects.filter(ist_id=ist_id)
@@ -235,7 +238,6 @@ def sendMessage(request):
 	if ist_id==-1:
 		response= redirect('users:home')
 		response.delete_cookie('token')
-		print("xeeeeeeeeeee")
 		return response
 	else:
 		if request.method == 'POST':
@@ -324,7 +326,31 @@ def updateLocation(request):
 			_build_id = checkBuilding(_lat,_longit)
 			Users.objects.filter(ist_id=_ist_id).update(lat = _lat, longit = _longit, build_id= _build_id)
 			return HttpResponse(status=204)
-	return HttpResponse('<p>Nothing to show</p>')		
+	return HttpResponse('<p>Nothing to show</p>')	
+
+
+def getMessages(request):
+	access_token=request.COOKIES.get('token')
+	print(access_token)
+	_ist_id=cache.get(access_token,-1)
+	print(_ist_id)
+	if _ist_id == -1:
+		response= redirect('users:home')
+		response.delete_cookie('token')
+		print("xeeeeeeeeeee")
+		return response
+	else:
+		if request.method=='GET':
+			print("geeeeeeeeeeeeeeeeeeeeeeeeeeeet")
+			allMessages=Messages.objects.filter(receiver=_ist_id)
+
+			messages= []
+			for item in allMessages:
+				messages.append({'date':item.date, 'content':item.content})
+
+		return JsonResponse({'messages':messages})
+
+
 
 
 
