@@ -18,6 +18,8 @@ urlpatterns = [
     path('nearby/building/', csrf_exempt(views.nearbyBuilding), name = 'nearbyBuilding'),
     path('updateLocation/', csrf_exempt(views.updateLocation), name = 'updateLocation'),
     path('auxiliar/', csrf_exempt(views.auxiliar), name = 'auxiliar'),
+    path('getMessages/', csrf_exempt(views.getMessages), name = 'getMessages'),
+
 
     ]
 

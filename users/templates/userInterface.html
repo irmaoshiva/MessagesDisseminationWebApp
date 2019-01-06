@@ -7,6 +7,53 @@
 {% if user.flag %}
 	<head>
 
+
+
+			<style type="text/css">
+
+			.table {
+       		 border-collapse: collapse!important
+		    }
+		    .table td,
+		    .table th {
+		        background-color: #fff!important
+		    }
+		    .table-bordered td,
+		    .table-bordered th {
+		        border: 1px solid #ddd!important
+		    }
+
+			    .table {
+				    max-width: 100%;
+				    margin-bottom: 1rem;
+				    background-color: transparent
+    				overflow: hidden;
+    				width: 50%;
+				}
+
+				.table td,
+				.table th {
+				    padding: .75rem;
+				    vertical-align: top;
+				    border-top: 1px solid #e9ecef
+				}
+				.table thead th {
+				    vertical-align: bottom;
+				    border-bottom: 2px solid #e9ecef
+				}
+				 .table-responsive {
+				        display: block;
+				        width: 100%;
+				        overflow-x: auto;
+				        -ms-overflow-style: -ms-autohiding-scrollbar
+				    }
+				    .table-responsive.table-bordered {
+				        border: 0
+    			}
+   			 </style>
+
+
+
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
 		<script type="text/javascript">
@@ -50,6 +97,22 @@
 				}
 
 
+				function getMessages() {
+					    $.get('/app/getMessages/', function(data){
+					        messages = data.messages;
+					        var table = $('#messages')
+					        $("#messages tr").remove();
+					        for (var i = 0; i < messages.length; i++) {
+					            var row = $("<tr/>");
+					            row.append($("<td/>").append('<h6>' + messages[i].date + '</h6>'));
+					            row.append($("<td/>").append('<h6>' + messages[i].content + '</h6>'));
+					            table.append(row);
+					        }
+
+					    });
+					}
+
+
 						var myVar;    
 						function doPeriod(){
 
@@ -57,15 +120,19 @@
 						    myVar = setTimeout(doPeriod, 5000);
 						}
 
+						var auxVar;    
+						function doPeriodMessage(){
+
+							getMessages()
+						    auxVar = setTimeout(doPeriodMessage, 1000);
+						}
+
 						$(document).ready(function(){
 						    doPeriod();
+						    doPeriodMessage();
 						});
 
-
-
-
 			</script>
-
 
 
 	</head>
@@ -86,6 +153,8 @@
 
 
 		<script >getLocation()</script>
+
+		<script>getMessages()</script>
 
 		<p id="demo"></p>
 
@@ -117,7 +186,24 @@
 	                 <input type="text" name="message" ><br> <input type="submit"  /> </p>
 		</form>
 
-		
+
+		</table>
+        <h4>Messages </p> 
+        <table class="table" id='messages'>
+            <tbody>    
+            <div class="message">
+                <tr h>
+                    <td  >
+                        <h6>{{ message.date|date:'Y-m-d H:i:s' }}</h6>
+                    </td>
+                    <td >
+                        <h6>{{ message.content }}</h6>
+                    </td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+
 
 
 		<form  method="post" action="{% url 'users:logout' %}">
@@ -128,7 +214,6 @@
 
 
 
-	
 
 
 	</body>

@@ -24,6 +24,15 @@ class Users(models.Model):
 	def __str__(self):
 		return self.ist_id
 
+class LogsMovements(models.Model):
+	ist_id = models.CharField(max_length = 10, primary_key = True)
+	build_id = models.CharField(max_length = 255)
+	start = models.DateTimeField()
+	end = models.DateTimeField(blank = True, null = True)
+
+	def __str__(self):
+		return self.ist_id
+
 class Messages(models.Model):
 	content = models.CharField(max_length = 255)
 	receiver = models.ForeignKey(Users, on_delete = models.CASCADE)

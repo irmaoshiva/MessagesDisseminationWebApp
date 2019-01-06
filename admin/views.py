@@ -152,6 +152,9 @@ def sendMessagesBot(request):
 
 		while True:
 			_allUsers = Users.objects.filter(build_id = _build_id)
+			if not _allUsers:
+				return HttpResponse("Error: No Users in that Building", content_type = "text/plain", status = 400)
+
 			for item in _allUsers:
 				_message = Messages(content = _content, receiver = item, date = now())
 				_message.save()
@@ -161,43 +164,14 @@ def sendMessagesBot(request):
 			counter = counter + 1
 			time.sleep(int(_periodicity))
 
+		allMessages = Messages.objects.all()
+		response = serialize("json", allMessages)
+
+		pprint(response)
+
 		return HttpResponse("Bot Done", content_type = "text/plain")
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
-
-def sendMessageBuild(request):
-	access_token=request.COOKIES.get('token')
-	ist_id=cache.get(access_token,-1)
-	if ist_id==-1:
-		response= redirect('users:home')
-		response.delete_cookie('token')
-		print("xeeeeeeeeeee")
-		return response
-	else:
-		if request.method == 'POST':
-			_content=request.POST.get('message', '')
-			_data= Users.objects.filter(ist_id=ist_id)
-			for aux in _data:
-				_build_id=aux.build_id
-			if (_build_id!= -1):
-			# Q is to exclude the user with this ist_id
-				_allUsers=Users.objects.all().filter(~Q(ist_id=ist_id))
-
-				for item in _allUsers:
-					if item.build_id==_build_id:
-						_message=Messages(content=_content,receiver=item,date=now())
-						_message.save()
-			return HttpResponse(status=204)
-				
-		allMessages=Messages.objects.all()
-		response = serialize("json", allMessages)
-		return HttpResponse(response, content_type = 'application/json')
-
-
-
-
-
-
 
 def logout_view(request):
 	if request.method == 'POST': 
