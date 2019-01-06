@@ -11,6 +11,7 @@
 
 			<style type="text/css">
 
+
 			.table {
        		 border-collapse: collapse!important
 		    }
@@ -101,11 +102,18 @@
 					    $.get('/app/getMessages/', function(data){
 					        messages = data.messages;
 					        var table = $('#messages')
+					        var row1= $("<tr/>")
 					        $("#messages tr").remove();
+					        row1.append($("<td/>").append('<h4>Date</h4>'));
+					        row1.append($("<td/>").append('<h4>Sender Id</h4>'));
+					      	row1.append($("<td/>").append('<h4>Content</h4>'));
+					      	table.append(row1);
 					        for (var i = 0; i < messages.length; i++) {
 					            var row = $("<tr/>");
 					            row.append($("<td/>").append('<h6>' + messages[i].date + '</h6>'));
-					            row.append($("<td/>").append('<h6>' + messages[i].content + '</h6>'));
+					            row.append($("<td/>").append('<h6>' + messages[i].sender + '</h6>'));
+					      		row.append($("<td/>").append('<h6>' + messages[i].content + '</h6>'));
+
 					            table.append(row);
 					        }
 
@@ -117,14 +125,14 @@
 						function doPeriod(){
 
 							getLocation()
-						    myVar = setTimeout(doPeriod, 5000);
+						    myVar = setTimeout(doPeriod, 10000);
 						}
 
 						var auxVar;    
 						function doPeriodMessage(){
 
 							getMessages()
-						    auxVar = setTimeout(doPeriodMessage, 1000);
+						    auxVar = setTimeout(doPeriodMessage, 500);
 						}
 
 						$(document).ready(function(){
@@ -138,11 +146,12 @@
 	</head>
 	<body>
 	  	<h1>Welcome to Messages Dissemination </h1>
-	  	  
-	  	  Ist_id: {{user.ist_id}}
 
-	  	  <p> </p>
-	  	  Name: {{user.name}} 
+
+	  	  
+	  	  <h4>IST ID: {{user.ist_id}} </h4>
+
+	  	 <h4> Name:  {{user.name}} </h4>
 
 
 		<style>
@@ -156,7 +165,20 @@
 
 		<script>getMessages()</script>
 
-		<p id="demo"></p>
+		<h4>My current coordinates </h4>
+		<p id="demo">
+
+			<h4> Only to Check exchanges </h4>
+			
+		<form action="{% url 'users:updateLocation' %}" method="post" >
+			  {% csrf_token %}
+		      <p>latitude <input type="numeric"  name="lat" required /> 
+		    longitude  <input type="numeric"  name="longit" required /> 
+       		<input type='submit' value='Submit'/></p>
+
+		</form>
+
+		</p>
 
 
 
@@ -164,37 +186,40 @@
 
 		<form action="{% url 'users:range' %}" method="post" >
 			  {% csrf_token %}
-		      <p>Range	      	 <input type="number" min="0" name="range" required ><br><input type="submit"  /> </p>
+		      <p>Range	      	 <input type="number" min="0" name="range" required/>
+		      <input type="submit"  /> </p>
 		</form>
 
-			<h4> Who is nearby me on: </h4>
+			<h4> Who is nearby me on: 
 
-		<a href="{% url 'users:nearbyBuilding' %}">myBuilding</a>    <a href="{% url 'users:nearbyRange' %}">myRange</a> </h4>
+		<a href="{% url 'users:nearbyBuilding' %}">myBuilding</a>   <a href="{% url 'users:nearbyRange' %}">myRange</a> </h4>
 
 
 
 		<form  method="post" action="{% url 'users:sendMessage' %}" >
 	            {% csrf_token %}
 	                <p>Insert a Message to users inside my Range:
-	                 <input type="text" name="message"><br> <input type="submit"  /> </p>
+	                 <input type="text" name="message"/>
+	                 <input type="submit"  /> </p>
 		</form>
 
 
 		<form  method="post" action="{% url 'users:sendMessageBuild' %}" >
 	            {% csrf_token %}
 	                <p>Insert a Message to users in my Building:
-	                 <input type="text" name="message" ><br> <input type="submit"  /> </p>
+	                 <input type="text" name="message"/ >
+	                 <input type="submit"  /> </p>
 		</form>
 
 
 		</table>
-        <h4>Messages </p> 
+        <h4>Received messages </p> 
         <table class="table" id='messages'>
             <tbody>    
             <div class="message">
                 <tr h>
                     <td  >
-                        <h6>{{ message.date|date:'Y-m-d H:i:s' }}</h6>
+                        <h6>{{ message.date}}</h6>
                     </td>
                     <td >
                         <h6>{{ message.content }}</h6>

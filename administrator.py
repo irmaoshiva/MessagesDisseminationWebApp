@@ -186,13 +186,13 @@ def logMovementsUser(secret):
 
 	pprint(data)
 
-	#for aux in data:
-	#	print("MOVEMENT " + str(i))
-	#	print('IST ID: ' + aux['ist_id'])
-	#	print('Building ID: ' + aux['build_id'])
-	#	print('Entry Date: ' + aux['start'])
-	#	print('Exit Date: ' + aux['end'] + '\n')
-	#	i = i + 1
+	for aux in data:
+		print("MOVEMENT " + str(i))
+		print('IST ID: ' + aux['fields']['ist_id'])
+		print('Building ID: ' + aux['fields']['build_id'])
+		print('Entry Date: ' + aux['fields']['start'])
+		print('Exit Date: ' + str(aux['fields']['end']) + '\n')
+		i = i + 1
 
 def logMovementsBuilding(secret):
 	i = 0
@@ -221,10 +221,10 @@ def logMovementsBuilding(secret):
 
 	for aux in data:
 		print("MOVEMENT " + str(i))
-		print('IST ID: ' + aux['ist_id'])
-		print('Building ID: ' + aux['build_id'])
-		print('Entry Date: ' + aux['start'])
-		print('Building ID: ' + aux['end'] + '\n')
+		print('IST ID: ' + aux['fields']['ist_id'])
+		print('Building ID: ' + aux['fields']['build_id'])
+		print('Entry Date: ' + aux['fields']['start'])
+		print('Exit Date: ' + str(aux['fields']['end']) + '\n')
 		i = i + 1
 
 def logMovements(secret):
@@ -240,7 +240,7 @@ def logMovements(secret):
 			return
 
 		elif command == '2':
-			allUsers(secret)
+			logMovementsBuilding(secret)
 			return
 
 		else:

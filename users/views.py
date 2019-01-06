@@ -73,12 +73,14 @@ def auxiliar(request):
 	print("access_token")
 	print(access_token)
 	x=cache.get(access_token,-1)
-	_user= Users(ist_id = 'ist422433', name= 'johny', build_id='1', range_user = 100, lat=38.8187905, longit= -9.1029637)
-	_user.save()
 	_allUsers=Users.objects.all()
+
+	_user= Users(ist_id = 'istxxx', name= 'cao', build_id='-1', range_user = 100, lat=38.7368263, longit= -9.1392)
+	_user.save()
+
 	for item in _allUsers:
 		print("caraliuuuus")
-		_message=Messages(content='olaaaa',receiver=item,date=now())
+		_message=Messages(content='olaaxxxaa',receiver=item.ist_id,date=now(), sender='ist40xx0', build_id=item.build_id)
 		_message.save()
 
 	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
@@ -133,7 +135,6 @@ def logout(request):
 	if ist_id==-1:
 		response= redirect('users:home')
 		response.delete_cookie('token')
-		print("xeeeeeeeeeee")
 		return response
 	else:
 		response = render(request, './GoodBye.html')
@@ -155,7 +156,6 @@ def range(request):
 	if ist_id==-1:
 		response= redirect('users:home')
 		response.delete_cookie('token')
-		print("xeeeeeeeeeee")
 		return response
 	else:
 		if request.method == 'POST':
@@ -191,7 +191,6 @@ def nearbyRange(request):
 	if ist_id==-1:
 		response= redirect('users:home')
 		response.delete_cookie('token')
-		print("xeeeeeeeeeee")
 		return response
 	else:
 		_data= Users.objects.filter(ist_id=ist_id)
@@ -205,13 +204,12 @@ def nearbyRange(request):
 		nearMe=[]
 		for item in _allUsers:
 			if checkDistance(item.lat,_lat,item.longit,_longit,_range)==1:
-				print(item.ist_id)
 				nearMe.append({'ist_id':item.ist_id})
 
-				print('laaakjlkjlkjl')	
-
-		#response = serialize("json", nearMe)
-		return HttpResponse(nearMe, content_type = 'application/json')
+		if len(nearMe)>0:
+			return HttpResponse(nearMe, content_type = 'application/json')
+		else:
+			return HttpResponse("<h3> No one in your range </h3>")
 	
 
 
@@ -225,10 +223,15 @@ def nearbyBuilding(request):
 	else:
 		_me=Users.objects.filter(ist_id=ist_id)
 		for aux in _me:
-			print(aux.build_id)
 			_users=Users.objects.filter(build_id=aux.build_id).filter(~Q(ist_id=ist_id))
-		response = serialize("json", _users)
-		return HttpResponse(response, content_type = 'application/json')
+			if aux.build_id == '-1':
+				return HttpResponse("<h3> You are not in any building </h3>")
+			else:
+				_allUsers=[]
+				for item in _users:
+					_allUsers.append({'ist_id':item.ist_id})
+
+		return HttpResponse(_allUsers, content_type = 'application/json')
 	
 
 # @login_required(login_url='users:home')
@@ -252,7 +255,7 @@ def sendMessage(request):
 
 			for item in _allUsers:
 				if checkDistance(item.lat,_lat,item.longit,_longit,_range)==1:
-					_message=Messages(content=_content,receiver=item,date=now())
+					_message=Messages(content=_content,receiver=item.ist_id,date=now(),sender=ist_id, build_id=item.build_id)
 					_message.save()
 			return HttpResponse(status=204)
 		else:	
@@ -261,14 +264,12 @@ def sendMessage(request):
 			return HttpResponse(response, content_type = 'application/json')
 
 
-# ESTE NÃO ESTÁ TESTADO!!!
 def sendMessageBuild(request):
 	access_token=request.COOKIES.get('token')
 	ist_id=cache.get(access_token,-1)
 	if ist_id==-1:
 		response= redirect('users:home')
 		response.delete_cookie('token')
-		print("xeeeeeeeeeee")
 		return response
 	else:
 		if request.method == 'POST':
@@ -276,13 +277,15 @@ def sendMessageBuild(request):
 			_data= Users.objects.filter(ist_id=ist_id)
 			for aux in _data:
 				_build_id=aux.build_id
+				print("my_build_id")
+				print(_build_id)
 			if (_build_id!= -1):
 			# Q is to exclude the user with this ist_id
 				_allUsers=Users.objects.all().filter(~Q(ist_id=ist_id))
 
 				for item in _allUsers:
 					if item.build_id==_build_id:
-						_message=Messages(content=_content,receiver=item,date=now())
+						_message=Messages(content=_content,receiver=item.ist_id,date=now(),sender=ist_id, build_id=item.build_id)
 						_message.save()
 			return HttpResponse(status=204)
 				
@@ -303,27 +306,23 @@ def checkBuilding(_latUser,_longitUser):
 
 def updateLocation(request):
 	access_token=request.COOKIES.get('token')
-	print(access_token)
 	_ist_id=cache.get(access_token,-1)
-	print(_ist_id)
 	if _ist_id == -1:
 		response= redirect('users:home')
 		response.delete_cookie('token')
-		print("xeeeeeeeeeee")
 		return response
 	else:
 		if request.method =='POST':
-			print('recebi um POST NO updateLocation')
 			_lat=request.POST.get('lat')
 			_lat= float(_lat)
 			_longit=request.POST.get('longit')
 			_longit=float(_longit)
-			print("latitudee")
-			print(type(_lat))
-			print(_lat)
-			print("longit")
-			print(_longit)
 			_build_id = checkBuilding(_lat,_longit)
+
+			print('longit')
+			print(_longit)
+			print('latittt')
+			print(_lat)
 
 			_user =  Users.objects.filter(ist_id = _ist_id)
 
@@ -347,22 +346,18 @@ def updateLocation(request):
 
 def getMessages(request):
 	access_token=request.COOKIES.get('token')
-	#print(access_token)
 	_ist_id=cache.get(access_token,-1)
-	#print(_ist_id)
 	if _ist_id == -1:
 		response= redirect('users:home')
 		response.delete_cookie('token')
-		#print("xeeeeeeeeeee")
 		return response
 	else:
 		if request.method=='GET':
-			#print("geeeeeeeeeeeeeeeeeeeeeeeeeeeet")
 			allMessages=Messages.objects.filter(receiver=_ist_id)
 
 			messages= []
 			for item in allMessages:
-				messages.append({'date':item.date, 'content':item.content})
+				messages.append({'date':item.date, 'content':item.content, 'sender':item.sender})
 
 		return JsonResponse({'messages':messages})
 

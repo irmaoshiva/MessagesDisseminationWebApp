@@ -35,8 +35,11 @@ class LogsMovements(models.Model):
 
 class Messages(models.Model):
 	content = models.CharField(max_length = 255)
-	receiver = models.ForeignKey(Users, on_delete = models.CASCADE)
+	receiver = models.CharField(max_length = 255)
 	date = models.DateTimeField(default = timezone.now)
+	sender = models.CharField(max_length = 255)
+	build_id =  models.CharField(max_length = 255)
+
 
 	def __str__(self):
 		return self.content
