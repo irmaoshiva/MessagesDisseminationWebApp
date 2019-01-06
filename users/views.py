@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.core.serializers import serialize
-from management.models import Buildings, Users, Messages
+from management.models import Buildings, Users, LogsMovements, Messages
 from math import sin, cos, sqrt, atan2, radians
 from django.db.models import Count, Q
 import fenixedu
@@ -305,6 +305,12 @@ def checkBuilding(_latUser,_longitUser):
 	
 
 def updateLocation(request):
+	
+	_last_build = 0
+
+
+
+
 	access_token=request.COOKIES.get('token')
 	print(access_token)
 	_ist_id=cache.get(access_token,-1)
@@ -327,7 +333,26 @@ def updateLocation(request):
 			print("longit")
 			print(_longit)
 			_build_id = checkBuilding(_lat,_longit)
-			Users.objects.filter(ist_id=_ist_id).update(lat = _lat, longit = _longit, build_id= _build_id)
+			
+			
+
+			if _last_build == _build_id:
+				Users.objects.filter(ist_id=_ist_id).update(lat = _lat, longit = _longit)
+			else:
+				Users.objects.filter(ist_id = _ist_id).update(lat = _lat, longit = _longit, build_id = _build_id)
+				if not LogsMovements.objects.filter(ist_id = _ist_id):
+					_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now())
+					_logs.save()
+				else:
+					LogsMovements.objects.filter(ist_id = _ist_id).update(end = now())
+					if _build_id != -1:
+						_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now())
+						_logs.save()
+					
+			_last_build = _build_id
+			
+			
+
 			return HttpResponse(status=204)
 	return HttpResponse('<p>Nothing to show</p>')	
 

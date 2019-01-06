@@ -159,6 +159,91 @@ def sendMessagesBot(secret):
 
 	print(r.text + '\n')
 
+def logMovementsUser(secret):
+	i = 0
+	pprint(secret)
+
+	print("IST ID:")
+	ist_id = input("> ")
+
+	payload = {"secret" : secret['secret'], "ist_id" : ist_id}
+
+	r = requests.post("http://127.0.0.1:8000/admin/logs/movements/user", data = payload)
+
+	print('Status: ' + str(r.status_code) + '\n')
+
+	if r.status_code == 401:
+		print('Error: Invalid Login\n')
+		main()
+		return
+	elif r.status_code != 200:
+		print(r.text + '\n')
+		return
+
+	data = r.json()
+
+	pprint(data)
+
+	for aux in data:
+		print("MOVEMENT " + str(i))
+		print('IST ID: ' + aux['ist_id'])
+		print('Building ID: ' + aux['build_id'])
+		print('Entry Date: ' + aux['start'])
+		print('Building ID: ' + aux['end'] + '\n')
+		i = i + 1
+
+def logMovementsBuilding(secret):
+	i = 0
+	pprint(secret)
+
+	print("Building ID:")
+	build_id = input("> ")
+
+	payload = {"secret" : secret['secret'], "build_id" : build_id}
+
+	r = requests.post("http://127.0.0.1:8000/admin/logs/movements/building", data = payload)
+
+	print('Status: ' + str(r.status_code) + '\n')
+
+	if r.status_code == 401:
+		print('Error: Invalid Login\n')
+		main()
+		return
+	elif r.status_code != 200:
+		print(r.text + '\n')
+		return
+
+	data = r.json()
+
+	pprint(data)
+
+	for aux in data:
+		print("MOVEMENT " + str(i))
+		print('IST ID: ' + aux['ist_id'])
+		print('Building ID: ' + aux['build_id'])
+		print('Entry Date: ' + aux['start'])
+		print('Building ID: ' + aux['end'] + '\n')
+		i = i + 1
+
+def logMovements(secret):
+	while True:
+		print("Filter:")
+		print("(1) - User")
+		print("(2) - Building")
+		
+		command = input('>> ')
+
+		if command == '1':
+			print('Tou aqui 1\n')
+			logMovementsUser(secret)
+
+		elif command == '2':
+			print('Tou aqui 2\n')			
+			allUsers(secret)
+
+		else:
+			print('Insert a valid command!\n')
+
 def logout(secret):
 
 	pprint(secret)

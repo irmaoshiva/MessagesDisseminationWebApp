@@ -95,6 +95,8 @@ def listUsersInBuilding(request):
 			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
 
 		_build_id = request.POST.get('build_id', '')
+		if not Buildings.objects.filter(id = _build_id):
+			return HttpResponse("Error: Invalid Building", content_type = "text/plain", status = 400)
 
 		_users = Users.objects.filter(build_id = _build_id)
 		response = serialize("json", _users)	
@@ -115,7 +117,6 @@ def registerBot(request):
 				break
 
 		_build_id = request.POST.get('build_id', '')
-
 		if not Buildings.objects.filter(id = _build_id):
 			return HttpResponse("Error: Invalid Building", content_type = "text/plain", status = 400)
 
@@ -172,6 +173,38 @@ def sendMessagesBot(request):
 		return HttpResponse("Bot Done", content_type = "text/plain")
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+def logMovementsUser(request):
+	if request.method == 'POST':
+		if not check_authentication(request):
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
+
+		_ist_id = request.POST.get('ist_id', '')
+		if not Users.objects.filter(ist_id = _ist_id):
+			return HttpResponse("Error: Invalid User", content_type = "text/plain", status = 400)
+
+		_logs = LogsMovements.objects.filter(ist_id = _ist_id)
+		response = serialize("json", _logs)	
+		return HttpResponse(response, content_type = 'application/json')
+	else:
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+
+def logMovementsBuilding(request):
+	if request.method == 'POST':
+		if not check_authentication(request):
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
+
+		_build_id = request.POST.get('build_id', '')
+		if not Buildings.objects.filter(id = _build_id):
+			return HttpResponse("Error: Invalid Building", content_type = "text/plain", status = 400)
+
+		_logs = LogsMovements.objects.filter(build_id = _build_id)
+		response = serialize("json", _logs)	
+		return HttpResponse(response, content_type = 'application/json')
+	else:
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
 
 def logout_view(request):
 	if request.method == 'POST': 

@@ -25,7 +25,7 @@ class Users(models.Model):
 		return self.ist_id
 
 class LogsMovements(models.Model):
-	ist_id = models.CharField(max_length = 10, primary_key = True)
+	ist_id = models.CharField(max_length = 10)
 	build_id = models.CharField(max_length = 255)
 	start = models.DateTimeField()
 	end = models.DateTimeField(blank = True, null = True)
