@@ -79,14 +79,35 @@ WSGI_APPLICATION = 'MessagesDisseminationWebApp.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-
+if os.getenv('GAE_APPLICATION', None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '/cloudsql/asint-227820:europe-west1:sqlinstance',
+            'USER': 'sqluser',
+            'PASSWORD': 'sqluser',
+            'NAME': 'instanceBD',
+        }
     }
-}
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+            'NAME': 'instanceBD',
+            'USER': 'sqluser',
+            'PASSWORD': 'sqluser',
+        }
+    }
+    #DATABASES = {
+     #   'default': {
+      #      'ENGINE': 'django.db.backends.sqlite3',
+       #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+        #}
+    #}
 
 
 # Password validation
@@ -129,7 +150,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = 'static'
 
 CACHES = {
     'default': {
