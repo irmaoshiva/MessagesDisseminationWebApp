@@ -9,7 +9,7 @@ def login():
 		password = input("> ")
 
 		payload = {"username" : username, "password" : password}
-		r = requests.post("http://127.0.0.1:8000/admin/login/", data = payload)
+		r = requests.post("https://asint-227820.appspot.com/admin/login/", data = payload)
 
 		print('Status: ' + str(r.status_code) + '\n')
 
@@ -41,7 +41,7 @@ def defineBuildings(secret):
 	for aux in buildings_dict:
 		payload = {"secret" : secret['secret'], "id" : aux['id'], "name": aux['name'], "lat" : aux['lat'], "longit" : aux['longit']}
 		pprint(payload)
-		r = requests.post("http://127.0.0.1:8000/admin/buildings/", data=payload)
+		r = requests.post("https://asint-227820.appspot.com/admin/buildings/", data=payload)
 
 		print('Status: ' + str(r.status_code) + '\n')
 		print('Message: ' + r.text + '\n')
@@ -58,7 +58,7 @@ def allUsers(secret):
 	i = 0
 	pprint(secret)
 
-	r = requests.post("http://127.0.0.1:8000/admin/users/", data = secret)
+	r = requests.post("https://asint-227820.appspot.com/admin/users/", data = secret)
 
 	print('Status: ' + str(r.status_code) + '\n')
 
@@ -75,7 +75,8 @@ def allUsers(secret):
 	for aux in data:
 		print("USER " + str(i))
 		print('IST ID: ' + aux['pk'])
-		print('Name: ' + aux['fields']['name'] + '\n')
+		print('Name: ' + aux['fields']['name'])
+		print('Building ID: ' + aux['fields']['build_id'] + '\n')
 		i = i + 1
 
 def buildingUsers(secret):
@@ -87,7 +88,7 @@ def buildingUsers(secret):
 
 	payload = {"secret" : secret['secret'], "build_id" : build_id}
 
-	r = requests.post("http://127.0.0.1:8000/admin/building/users/", data = payload)
+	r = requests.post("https://asint-227820.appspot.com/admin/building/users/", data = payload)
 
 	print('Status: ' + str(r.status_code) + '\n')
 
@@ -104,7 +105,8 @@ def buildingUsers(secret):
 	for aux in data:
 		print("USER " + str(i))
 		print('IST ID: ' + aux['pk'])
-		print('Name: ' + aux['fields']['name'] + '\n')
+		print('Name: ' + aux['fields']['name'])
+		print('Building ID: ' + aux['fields']['build_id'] + '\n')
 		i = i + 1
 
 def registerBot(secret):
@@ -115,7 +117,7 @@ def registerBot(secret):
 
 	payload = {"secret" : secret['secret'], "build_id" : build_id}
 
-	r = requests.post("http://127.0.0.1:8000/admin/bots/", data = payload)
+	r = requests.post("https://asint-227820.appspot.com/admin/bots/", data = payload)
 
 	print('Status: ' + str(r.status_code) + '\n')
 
@@ -147,7 +149,7 @@ def sendMessagesBot(secret):
 
 	payload = {"secret" : secret['secret'], "build_id" : build_id, "message" : message, "number" : number, "periodicity" : periodicity}
 
-	r = requests.post("http://127.0.0.1:8000/admin/bots/messages/", data = payload)
+	r = requests.post("https://asint-227820.appspot.com/admin/bots/messages/", data = payload)
 
 	print('Status: ' + str(r.status_code) + '\n')
 
@@ -170,7 +172,7 @@ def logMovementsUser(secret):
 
 	payload = {"secret" : secret['secret'], "ist_id" : ist_id}
 
-	r = requests.post("http://127.0.0.1:8000/admin/logs/movements/user", data = payload)
+	r = requests.post("https://asint-227820.appspot.com/admin/logs/movements/user", data = payload)
 
 	print('Status: ' + str(r.status_code) + '\n')
 
@@ -203,7 +205,7 @@ def logMovementsBuilding(secret):
 
 	payload = {"secret" : secret['secret'], "build_id" : build_id}
 
-	r = requests.post("http://127.0.0.1:8000/admin/logs/movements/building", data = payload)
+	r = requests.post("https://asint-227820.appspot.com/admin/logs/movements/building", data = payload)
 
 	print('Status: ' + str(r.status_code) + '\n')
 
@@ -255,7 +257,7 @@ def logMessagesUser(secret):
 
 	payload = {"secret" : secret['secret'], "ist_id" : ist_id}
 
-	r = requests.post("http://127.0.0.1:8000/admin/logs/messages/user", data = payload)
+	r = requests.post("https://asint-227820.appspot.com/admin/logs/messages/user", data = payload)
 
 	print('Status: ' + str(r.status_code) + '\n')
 
@@ -287,7 +289,7 @@ def logMessagesBuilding(secret):
 
 	payload = {"secret" : secret['secret'], "build_id" : build_id}
 
-	r = requests.post("http://127.0.0.1:8000/admin/logs/messages/building", data = payload)
+	r = requests.post("https://asint-227820.appspot.com/admin/logs/messages/building", data = payload)
 
 	print('Status: ' + str(r.status_code) + '\n')
 
@@ -332,7 +334,7 @@ def logMessages(secret):
 def logout(secret):
 
 	pprint(secret)
-	r = requests.post("http://127.0.0.1:8000/admin/logout/", data = secret)
+	r = requests.post("https://asint-227820.appspot.com/admin/logout/", data = secret)
 
 	print('Status: ' + str(r.status_code) + '\n')
 	print('Message: ' + r.text + '\n')

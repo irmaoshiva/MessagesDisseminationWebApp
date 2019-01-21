@@ -152,11 +152,20 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
 
+if os.getenv('GAE_APPLICATION', None):
+    
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'KEY_PREFIX': 'myapp',
+            'LOCATION': 'asint-227820.appspot.com:11211',
+        }
+    }
+
+else:
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'KEY_PREFIX': 'myapp',
-        'LOCATION': '127.0.0.1:11211',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'XXXXXXXXXXXXXXXXX',
     }
 }
-

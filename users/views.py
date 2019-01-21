@@ -31,7 +31,8 @@ from django.utils import timezone
 
 
 client_id ='1695915081465930'
-redirect_uri = 'http://127.0.0.1:8000/app/auth/'
+redirect_uri = 'https://asint-227820.appspot.com/app/auth/'
+#redirect_uri = 'http://127.0.0.1:8000/app/auth/'
 request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/userdialog?client_id=' + client_id + '&redirect_uri=' + redirect_uri
 secret= 'XXknAbAk2nTLFdYByKqjDXVC+k94NYc5t34EUGYAxD4qaWUB+aopdY2z/9j5oRvDoTJFpaHhg42dsQ+mf6Gesg=='
 
@@ -48,6 +49,7 @@ def index(request):
 
 	else:
 		_ist_id=cache.get(access_token,-1)
+
 		#_name= cache.get(access_token+_ist_id,'ui');
 		nr={}
 		if _ist_id == -1:
@@ -65,27 +67,12 @@ def index(request):
 
 
 
-
-
-
 def auxiliar(request):
-	access_token=request.COOKIES.get('token')
-	print("access_token")
-	print(access_token)
-	x=cache.get(access_token,-1)
-	_allUsers=Users.objects.all()
-
-	_user= Users(ist_id = 'istxxx', name= 'cao', build_id='-1', range_user = 100, lat=38.7368263, longit= -9.1392)
-	_user.save()
-
-	for item in _allUsers:
-		print("caraliuuuus")
-		_message=Messages(content='olaaxxxaa',receiver=item.ist_id,date=now(), sender='ist40xx0', build_id=item.build_id)
-		_message.save()
-
+	Buildings.objects.all().delete()
+	Messages.objects.all().delete()
+	LogsMovements.objects.all().delete()
+	
 	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
-
-
 
 
 def login(request):
@@ -115,8 +102,8 @@ def auth(request):
 		_ist_id = request_info.json().get('username')
 		_name = request_info.json().get('name')
 
-		y=cache.set(access_token,_ist_id,60*15)
-		z=cache.set(access_token+_ist_id,_name,60*15)
+		y=cache.set(access_token,_ist_id,60*60)
+		z=cache.set(access_token+_ist_id,_name,60*60)
 		
 
 
@@ -179,7 +166,7 @@ def checkDistance(_lat1,_lat2,_long1,_long2,_range):
 	a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
 	c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
-	_distance = R * c*1000
+	_distance = R * c * 1000
 	if _distance <_range:
 		return 1
 	return 0
@@ -296,7 +283,7 @@ def sendMessageBuild(request):
 
 def checkBuilding(_latUser,_longitUser):
 	#verificar qual o raio a meter
-	radius=100
+	radius=80
 	allBuilds=Buildings.objects.all()
 	for item in allBuilds:
 		if checkDistance(_latUser,item.lat,_longitUser,item.longit,radius)==1:

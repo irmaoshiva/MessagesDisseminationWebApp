@@ -3,15 +3,15 @@
   "id" : "2448131360897",
   "name" : "Alameda",
   "containedSpaces" : [ {
-    "id" : "2448131361042",
-    "name" : "Pavilhão de Civil",
-    "lat": 38.7368263,
-    "longit" : -9.139276
-  }, {
     "id" : "2448131361091",
     "name" : "Torre Norte",
     "lat" : 38.7375584,
     "longit" : -9.1387255
+  }, {
+    "id" : "2448131361042",
+    "name" : "Pavilhão de Civil",
+    "lat": 38.7368263,
+    "longit" : -9.139276
   }, {
     "id" : "2448131361155",
     "name" : "Pavilhão de Mecânica III",
