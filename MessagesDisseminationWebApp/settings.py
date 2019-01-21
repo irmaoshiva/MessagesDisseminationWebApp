@@ -160,7 +160,7 @@ if os.getenv('GAE_APPLICATION', None):
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'XXXXXXXXXXXXXXXXX',
+            'LOCATION': '85.242.177.164:12345',
         }
     }
 
