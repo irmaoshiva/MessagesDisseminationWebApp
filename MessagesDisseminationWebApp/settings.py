@@ -76,11 +76,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MessagesDisseminationWebApp.wsgi.application'
 
-redirect = 0
+redirect_uri = ''
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 if os.getenv('GAE_APPLICATION', None):
-    redirect = 1
+    redirect_uri += 'https://asint-227820.appspot.com/app/auth/'
+    client_id ='1695915081465930'
+    secret= 'XXknAbAk2nTLFdYByKqjDXVC+k94NYc5t34EUGYAxD4qaWUB+aopdY2z/9j5oRvDoTJFpaHhg42dsQ+mf6Gesg=='
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -92,6 +94,9 @@ if os.getenv('GAE_APPLICATION', None):
     }
 
 else:
+    redirect_uri += 'http://127.0.0.1:8000/app/auth/'
+    client_id = '1977390058176584'
+    secret = 'PnHgsbWQclqX5fNUXNzyN2JFfI8hnb1XqWVqjXm7vhycVeuatuYbSJN+iKKzeKLbIuAik0v1zxDMt87zr0YLVQ=='
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
