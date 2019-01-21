@@ -66,9 +66,8 @@ def index(request):
 
 
 def auxiliar(request):
-	Buildings.objects.all().delete()
-	Messages.objects.all().delete()
-	LogsMovements.objects.all().delete()
+	x=Buildings.objects.all()
+	print(x)
 	
 	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
 
@@ -281,7 +280,7 @@ def sendMessageBuild(request):
 
 def checkBuilding(_latUser,_longitUser):
 	#verificar qual o raio a meter
-	radius=80
+	radius=70
 	allBuilds=Buildings.objects.all()
 	for item in allBuilds:
 		if checkDistance(_latUser,item.lat,_longitUser,item.longit,radius)==1:
@@ -345,6 +344,38 @@ def getMessages(request):
 				messages.append({'date':item.date, 'content':item.content, 'sender':item.sender})
 
 		return JsonResponse({'messages':messages})
+
+def updateBuilding(request):
+	access_token=request.COOKIES.get('token')
+	_ist_id=cache.get(access_token,-1)
+	if _ist_id == -1:
+		response= redirect('users:home')
+		response.delete_cookie('token')
+		return response
+	else:
+		if request.method=='GET':
+			_user=Users.objects.filter(ist_id=_ist_id)
+
+			nr=[]
+			for item in _user:
+				print("buildid")
+				print(item.build_id)
+				_build_id=item.build_id
+				print(_build_id)
+				print(type(_build_id))
+
+			if int(_build_id) == -1:
+				build_name='You are not in any building'
+			else:
+				_build=Buildings.objects.filter(id=_build_id)
+
+				for item in _build:
+					build_name=item.name
+			
+			print("o builllllllllllllllllllllddddddddd")
+			print(build_name)
+
+			return JsonResponse({'build':build_name})
 
 
 

@@ -19,6 +19,7 @@ urlpatterns = [
     path('updateLocation/', csrf_exempt(views.updateLocation), name = 'updateLocation'),
     path('auxiliar/', csrf_exempt(views.auxiliar), name = 'auxiliar'),
     path('getMessages/', csrf_exempt(views.getMessages), name = 'getMessages'),
+    path('updateBuilding/', csrf_exempt(views.updateBuilding), name = 'updateBuilding'),
 
 
     ]
