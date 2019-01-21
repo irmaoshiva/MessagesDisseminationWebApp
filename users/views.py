@@ -29,10 +29,11 @@ from django.conf import settings
 from django.utils import timezone
 
 
-
 client_id ='1695915081465930'
-redirect_uri = 'https://asint-227820.appspot.com/app/auth/'
-#redirect_uri = 'http://127.0.0.1:8000/app/auth/'
+if redirect:
+	redirect_uri = 'https://asint-227820.appspot.com/app/auth/'
+else:
+	redirect_uri = 'http://127.0.0.1:8000/app/auth/'
 request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/userdialog?client_id=' + client_id + '&redirect_uri=' + redirect_uri
 secret= 'XXknAbAk2nTLFdYByKqjDXVC+k94NYc5t34EUGYAxD4qaWUB+aopdY2z/9j5oRvDoTJFpaHhg42dsQ+mf6Gesg=='
 

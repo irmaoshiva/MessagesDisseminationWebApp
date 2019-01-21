@@ -76,10 +76,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MessagesDisseminationWebApp.wsgi.application'
 
-
+redirect = 0
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 if os.getenv('GAE_APPLICATION', None):
+    redirect = 1
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
