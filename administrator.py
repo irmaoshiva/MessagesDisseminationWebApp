@@ -344,7 +344,7 @@ def logout(secret):
 		return
 
 def clearBD(secret):
-	r = requests.post("http://127.0.0.1:8000/admin/clearBD/", data = secret)
+	r = requests.post("http://127.0.0.1:8000/admin/clear/", data = secret)
 
 def main():
 	print("\n---------- ADMINISTRATOR PAGE ----------\n")

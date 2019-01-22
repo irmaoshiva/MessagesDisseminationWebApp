@@ -20,17 +20,6 @@ from pprint import pprint
 
 # Create your views here.
 
-def clearDB(request):
-	if request.method == 'POST':
-		if not check_authentication(request):
-			return HttpResponse("Error: Inv", content_type = "text/plain", status = 400)
-
-		print("VAI FAZER!!!!!!!!!!!!!!!!!")
-		Buildings.objects.all().delete()
-		Messages.objects.all().delete()
-		LogsMovements.objects.all().delete()
-		print("JÁ FEZ!!!!!!!!!!!!!!!!!!!!")
-	return HttpResponse("OK", content_type = "text/plain", status = 200)
 
 
 	
@@ -102,6 +91,21 @@ def users(request):
 		return HttpResponse(response, content_type = 'application/json')
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+
+def clear(request):
+	if request.method == 'POST':
+		if not check_authentication(request):
+			return HttpResponse("Error: Invalid Login", content_type = "text/plain", status = 401)
+
+		Buildings.objects.all().delete()
+		Messages.objects.all().delete()
+		LogsMovements.objects.all().delete()
+		return HttpResponse(response, content_type = 'application/json')
+	else:
+		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
+
+
 
 def listUsersInBuilding(request):
 	if request.method == 'POST':
