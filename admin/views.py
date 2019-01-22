@@ -21,9 +21,18 @@ from pprint import pprint
 # Create your views here.
 
 def clearDB(request):
-	Buildings.objects.all().delete()
-	Messages.objects.all().delete()
-	LogsMovements.objects.all().delete()
+	if request.method == 'POST':
+		if not check_authentication(request):
+			return HttpResponse("Error: Inv", content_type = "text/plain", status = 400)
+
+		print("VAI FAZER!!!!!!!!!!!!!!!!!")
+		Buildings.objects.all().delete()
+		Messages.objects.all().delete()
+		LogsMovements.objects.all().delete()
+		print("JÁ FEZ!!!!!!!!!!!!!!!!!!!!")
+	return HttpResponse("OK", content_type = "text/plain", status = 200)
+
+
 	
 def login_view(request):
 	if request.method == 'POST':
