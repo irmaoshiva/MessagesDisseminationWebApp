@@ -32,7 +32,7 @@ def login():
 	return secret
 
 def defineBuildings(secret):
-	pprint(secret)
+	#pprint(secret)
 
 	json_data = open('buildings-alameda.json')
 	buildings_dict = json.load(json_data) #deserialises data
@@ -56,7 +56,7 @@ def defineBuildings(secret):
 
 def allUsers(secret):
 	i = 0
-	pprint(secret)
+	#pprint(secret)
 
 	r = requests.post("https://asint-227820.appspot.com/admin/users/", data = secret)
 
@@ -81,7 +81,7 @@ def allUsers(secret):
 
 def buildingUsers(secret):
 	i = 0
-	pprint(secret)
+	#pprint(secret)
 
 	print("Building ID:")
 	build_id = input("> ")
@@ -110,7 +110,7 @@ def buildingUsers(secret):
 		i = i + 1
 
 def registerBot(secret):
-	pprint(secret)
+	#pprint(secret)
 
 	print("Building ID:")
 	build_id = input("> ")
@@ -136,7 +136,7 @@ def registerBot(secret):
 	print('Password: ' + str(data['password']) + '\n')
 
 def sendMessagesBot(secret):
-	pprint(secret)
+	#pprint(secret)
 
 	print("Building ID:")
 	build_id = input("> ")
@@ -165,7 +165,7 @@ def sendMessagesBot(secret):
 
 def logMovementsUser(secret):
 	i = 0
-	pprint(secret)
+	#pprint(secret)
 
 	print("IST ID:")
 	ist_id = input("> ")
@@ -186,7 +186,7 @@ def logMovementsUser(secret):
 
 	data = r.json()
 
-	pprint(data)
+	#pprint(data)
 
 	for aux in data:
 		print("MOVEMENT " + str(i))
@@ -198,7 +198,7 @@ def logMovementsUser(secret):
 
 def logMovementsBuilding(secret):
 	i = 0
-	pprint(secret)
+	#pprint(secret)
 
 	print("Building ID:")
 	build_id = input("> ")
@@ -219,7 +219,7 @@ def logMovementsBuilding(secret):
 
 	data = r.json()
 
-	pprint(data)
+	#pprint(data)
 
 	for aux in data:
 		print("MOVEMENT " + str(i))
@@ -250,7 +250,7 @@ def logMovements(secret):
 
 def logMessagesUser(secret):
 	i = 0
-	pprint(secret)
+	#pprint(secret)
 
 	print("IST ID:")
 	ist_id = input("> ")
@@ -271,7 +271,7 @@ def logMessagesUser(secret):
 
 	data = r.json()
 
-	pprint(data)
+	#pprint(data)
 
 	for aux in data:
 		print("MESSAGE " + str(i))
@@ -282,7 +282,7 @@ def logMessagesUser(secret):
 
 def logMessagesBuilding(secret):
 	i = 0
-	pprint(secret)
+	#pprint(secret)
 
 	print("Building ID:")
 	build_id = input("> ")
@@ -303,11 +303,13 @@ def logMessagesBuilding(secret):
 
 	data = r.json()
 
-	pprint(data)
+	#pprint(data)
 
 	for aux in data:
 		print("MESSAGE " + str(i))
 		print('Content: ' + aux['fields']['content'])
+		print('sender ID: '+ aux['fields']['sender'])
+		print('receiver ID: '+ aux['fields']['receiver'])
 		print('Building ID: ' + aux['fields']['build_id'])
 		print('Date: ' + aux['fields']['date'] + '\n')
 		i = i + 1
@@ -333,7 +335,7 @@ def logMessages(secret):
 
 def logout(secret):
 
-	pprint(secret)
+	#pprint(secret)
 	r = requests.post("https://asint-227820.appspot.com/admin/logout/", data = secret)
 
 	print('Status: ' + str(r.status_code) + '\n')
