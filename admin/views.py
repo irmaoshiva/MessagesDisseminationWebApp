@@ -246,7 +246,7 @@ def logMessagesUser(request):
 		if not Users.objects.filter(ist_id = _ist_id):
 			return HttpResponse("Error: Invalid User", content_type = "text/plain", status = 400)
 
-		_logs = Messages.objects.filter(Q(sender='ist425330') | Q(receiver='ist425330'))
+		_logs = Messages.objects.filter(Q(sender=_ist_id) | Q(receiver=_ist_id))
 		response = serialize("json", _logs)	
 		return HttpResponse(response, content_type = 'application/json')
 	else:
