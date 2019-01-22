@@ -64,13 +64,14 @@ def index(request):
 	return response
 
 
-
+'''
 def auxiliar(request):
-	x=Buildings.objects.all()
-	print(x)
+	Buildings.objects.all().delete()
+	Messages.objects.all().delete()
+	LogsMovements.objects.all().delete()
 	
 	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
-
+'''
 
 def login(request):
 	return redirect(request_url)

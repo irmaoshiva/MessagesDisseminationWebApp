@@ -13,16 +13,6 @@
     "lat": 38.7368263,
     "longit" : -9.139276
   }, {
-    "id" : "2448131361155",
-    "name" : "Pavilhão de Mecânica III",
-    "lat":38.7368263,
-    "longit": -9.139276
-  }, {
-    "id" : "2448131384238",
-    "name" : "Pavilhão da Associação dos Estudantes",
-    "lat": 38.7368942,
-    "longit": -9.1378801
-  }, {
     "id" : "2448131361129",
     "name" : "Pavilhão de Informática III",
     "lat": 38.7374625,
@@ -37,10 +27,5 @@
     "name" : "Pavilhão de Matemática",
     "lat": 38.7358895,
     "longit": -9.1399463
-  }, {
-    "id" : "2448131361060",
-    "name" : "Pavilhão Central",
-    "lat": 38.7368098,
-    "longit": -9.1397191
   }]
 }

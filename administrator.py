@@ -343,6 +343,12 @@ def logout(secret):
 		main()
 		return
 
+def clearBD(secret):
+	r = requests.post("https://asint-227820.appspot.com/admin/clearBD/", data = secret)
+
+	if r.status_code != 200:
+		print("action failed")
+
 def main():
 	print("\n---------- ADMINISTRATOR PAGE ----------\n")
 
@@ -357,6 +363,7 @@ def main():
 		print("(5) - List the history of all the exchanged messages")
 		print("(6) - Register a new bot")
 		print("(7) - Run a bot")
+		print("(8) - Erase Data Base")
 		print("(10) - Logout")
 
 		command = input('>> ')
@@ -381,6 +388,9 @@ def main():
 
 		elif command == '7':
 			sendMessagesBot(secret)
+
+		elif command == '8':
+			clearBD(secret)
 
 		elif command == '10':
 			logout(secret)

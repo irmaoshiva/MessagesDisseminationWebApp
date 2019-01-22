@@ -6,7 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 app_name = 'admin'
 
 urlpatterns = [
-	path('login/', csrf_exempt(views.login_view), name = 'login_view'),
+	path('clearDB/', csrf_exempt(views.clearDB), name = 'clearDB'),
+    path('login/', csrf_exempt(views.login_view), name = 'login_view'),
 	path('logout/', csrf_exempt(views.logout_view), name = 'logout_view'),
     path('buildings/', csrf_exempt(views.buildings), name = 'buildings'),
     path('users/', csrf_exempt(views.users), name = 'users'),

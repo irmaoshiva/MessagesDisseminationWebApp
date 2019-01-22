@@ -20,6 +20,11 @@ from pprint import pprint
 
 # Create your views here.
 
+def clearDB(request):
+	Buildings.objects.all().delete()
+	Messages.objects.all().delete()
+	LogsMovements.objects.all().delete()
+	
 def login_view(request):
 	if request.method == 'POST':
 		# Try to log user
