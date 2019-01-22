@@ -37,8 +37,8 @@ request_url = 'https://fenix.tecnico.ulisboa.pt/oauth/userdialog?client_id=' + c
 
 def index(request):
 	access_token=request.COOKIES.get('token')
-	print("o accesssss é...?")
-	print(access_token)
+	#print("o accesssss é...?")
+	#print(access_token)
 	if access_token==None:
 		nr={}
 		nr['flag']=0
@@ -80,8 +80,8 @@ def auth(request):
 		return render(request, './invalid.html')
 	else:
 		access_token = request_access_token.json().get('access_token')
-		print("acess_token no login")
-		print(access_token)
+		#print("acess_token no login")
+		#print(access_token)
 		refresh_token = request_access_token.json().get('refresh_token')
 		token_expires = request_access_token.json().get('expires_in')
 
@@ -119,8 +119,8 @@ def logout(request):
 			if request.COOKIES.get('token'):
 				response.delete_cookie('token')
 			Users.objects.filter(ist_id=ist_id).delete()
-			print('dentro do logout-> a cache é')
-			print(cache.get('id'))
+			#print('dentro do logout-> a cache é')
+			#print(cache.get('id'))
 			return response
 
 
@@ -252,8 +252,8 @@ def sendMessageBuild(request):
 			_data= Users.objects.filter(ist_id=ist_id)
 			for aux in _data:
 				_build_id=aux.build_id
-				print("my_build_id")
-				print(_build_id)
+				#print("my_build_id")
+				#print(_build_id)
 			if (_build_id!= -1):
 			# Q is to exclude the user with this ist_id
 				_allUsers=Users.objects.all().filter(~Q(ist_id=ist_id))
@@ -294,10 +294,10 @@ def updateLocation(request):
 			_longit=float(_longit)
 			_build_id = checkBuilding(_lat,_longit)
 
-			print('longit')
-			print(_longit)
-			print('latittt')
-			print(_lat)
+			#print('longit')
+			#print(_longit)
+			#print('latittt')
+			#print(_lat)
 
 			_user =  Users.objects.filter(ist_id = _ist_id)
 
@@ -349,11 +349,11 @@ def updateBuilding(request):
 
 			nr=[]
 			for item in _user:
-				print("buildid")
-				print(item.build_id)
+				#print("buildid")
+				#print(item.build_id)
 				_build_id=item.build_id
-				print(_build_id)
-				print(type(_build_id))
+				#print(_build_id)
+				#print(type(_build_id))
 
 			if int(_build_id) == -1:
 				build_name='You are not in any building'
@@ -363,8 +363,8 @@ def updateBuilding(request):
 				for item in _build:
 					build_name=item.name
 			
-			print("o builllllllllllllllllllllddddddddd")
-			print(build_name)
+			#print("o builllllllllllllllllllllddddddddd")
+			#print(build_name)
 
 			return JsonResponse({'build':build_name})
 

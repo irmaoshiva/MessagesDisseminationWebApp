@@ -23,9 +23,9 @@ def sendMessages(request):
 		_build_id = request.POST.get('build_id', '')
 		_password = request.POST.get('password', '')
 
-		print('Bot ID: ' + _bot_id)
-		print('Building ID: ' + _build_id)
-		print('Password: ' + _password + '\n')
+		#print('Bot ID: ' + _bot_id)
+		#print('Building ID: ' + _build_id)
+		#print('Password: ' + _password + '\n')
 
 		if not Bots.objects.filter(id = _bot_id, build_id = _build_id, password = _password):
 			return HttpResponse("Error: Invalid Arguments", content_type = "text/plain", status = 400)
@@ -59,7 +59,7 @@ def sendMessages(request):
 		allMessages = Messages.objects.all()
 		response = serialize("json", allMessages)
 
-		pprint(response)
+		#pprint(response)
 
 		return HttpResponse("Bot Done", content_type = "text/plain")
 	else:

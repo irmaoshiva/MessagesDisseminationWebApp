@@ -16,7 +16,7 @@ periodicity = input("> ")
 
 payload = {"bot_id" : bot_id, "build_id" : build_id, "password" : password, "message" : message, "number" : number, "periodicity" : periodicity}
 
-r = requests.post("http://127.0.0.1:8000/bots/", data = payload)
+r = requests.post("https://asint-227820.appspot.com/bots/", data = payload)
 
 print('Status: ' + str(r.status_code) + '\n')
 
@@ -27,5 +27,3 @@ elif r.status_code != 200:
 	print(r.text + '\n')
 
 print(r.text + '\n')
-
-#https://asint-227820.appspot.com/

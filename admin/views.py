@@ -31,17 +31,17 @@ def login_view(request):
 
 		while True:
 			secret = random.randint(1, 101)
-			print('Secret no login: ' + str(secret) + '\n')
+			#print('Secret no login: ' + str(secret) + '\n')
 
 			if cache.get(secret, -1) == -1:
 				break
 
 		if username == 'admin' and password == '123':
-			print('fiz login\n')
+			#print('fiz login\n')
 
 			cache.set(secret, 1, 60*5)
 
-			print('Cache no login: ' + str(cache.get(secret, -1)) + '\n')
+			#print('Cache no login: ' + str(cache.get(secret, -1)) + '\n')
 
 			return JsonResponse({'secret': secret})
 		else:
@@ -51,12 +51,12 @@ def login_view(request):
 
 def check_authentication(request):
 	secret = request.POST.get('secret', '')
-	print('Secret na autenticação: ' + str(secret) + '\n')
+	#print('Secret na autenticação: ' + str(secret) + '\n')
 
 	if not secret:
 		return 0
 
-	print('Cache na autenticação: ' + str(cache.get(secret, -1)) + '\n')
+	#print('Cache na autenticação: ' + str(cache.get(secret, -1)) + '\n')
 
 	if cache.get(secret, -1) == -1:
 		return 0
@@ -87,7 +87,7 @@ def users(request):
 
 		_users = Users.objects.all()
 		response = serialize("json", _users)
-		pprint(response)
+		#pprint(response)
 		return HttpResponse(response, content_type = 'application/json')
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)
@@ -136,7 +136,7 @@ def registerBot(request):
 
 		while True:
 			_bot_id = random.randint(1, 101)
-			print('Bot ID: ' + str(_bot_id) + '\n')
+			#print('Bot ID: ' + str(_bot_id) + '\n')
 
 			if not Bots.objects.filter(id = _bot_id):
 				break
@@ -197,7 +197,7 @@ def sendMessagesBot(request):
 		allMessages = Messages.objects.all()
 		response = serialize("json", allMessages)
 
-		pprint(response)
+		#pprint(response)
 
 		return HttpResponse("Bot Done", content_type = "text/plain")
 	else:
@@ -270,7 +270,7 @@ def logout_view(request):
 		secret = check_authentication(request)
 
 		if secret:
-			print(secret)
+			#print(secret)
 			cache.delete(secret)
 			return HttpResponse("Logout Done", content_type = "text/plain")
 		else:
