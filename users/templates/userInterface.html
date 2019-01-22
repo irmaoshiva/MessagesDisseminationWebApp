@@ -232,6 +232,12 @@
 	                 <input type="submit"  /> </p>
 		</form>
 
+		<form  method="post" action="{% url 'users:logout' %}">
+	            {% csrf_token %}
+	            <br>
+	            <input type="submit" value="Lougout" />
+		</form>
+
 
 		</table>
         <h4>Received messages </p> 
@@ -252,11 +258,7 @@
 
 
 
-		<form  method="post" action="{% url 'users:logout' %}">
-	            {% csrf_token %}
-	            <br>
-	            <input type="submit" value="Lougout" />
-		</form>
+		
 
 
 

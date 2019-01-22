@@ -65,12 +65,6 @@ def index(request):
 
 
 
-def auxiliar(request):
-	x=Buildings.objects.all()
-	print(x)
-	
-	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
-
 
 def login(request):
 	return redirect(request_url)
@@ -341,7 +335,7 @@ def getMessages(request):
 
 			messages= []
 			for item in allMessages:
-				messages.append({'date':item.date, 'content':item.content, 'sender':item.sender})
+				messages.insert(0,{'date':item.date, 'content':item.content, 'sender':item.sender})
 
 		return JsonResponse({'messages':messages})
 

@@ -94,23 +94,23 @@ else:
     redirect_uri += 'http://127.0.0.1:8000/app/auth/'
     client_id = '1977390058176584'
     secret = 'PnHgsbWQclqX5fNUXNzyN2JFfI8hnb1XqWVqjXm7vhycVeuatuYbSJN+iKKzeKLbIuAik0v1zxDMt87zr0YLVQ=='
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-            'NAME': 'instanceBD',
-            'USER': 'sqluser',
-            'PASSWORD': 'sqluser',
-        }
-    }
     #DATABASES = {
      #   'default': {
-      #      'ENGINE': 'django.db.backends.sqlite3',
-       #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-
+      #      'ENGINE': 'django.db.backends.mysql',
+       #     'HOST': '127.0.0.1',
+        #    'PORT': '3306',
+         #   'NAME': 'instanceBD',
+          #  'USER': 'sqluser',
+           # 'PASSWORD': 'sqluser',
         #}
     #}
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+        }
+    }
 
 
 # Password validation
