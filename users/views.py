@@ -63,6 +63,15 @@ def index(request):
 			response.delete_cookie('token')
 	return response
 
+
+
+def auxiliar(request):
+	x=Buildings.objects.all()
+	print(x)
+	
+	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
+
+
 def login(request):
 	return redirect(request_url)
 
@@ -307,8 +316,9 @@ def updateLocation(request):
 				else:
 					Users.objects.filter(ist_id = _ist_id).update(lat = _lat, longit = _longit, build_id = _build_id)
 					if not LogsMovements.objects.filter(ist_id = _ist_id):
-						_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now())
-						_logs.save()
+						if _build_id != -1:
+							_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now())
+							_logs.save()
 					else:
 						LogsMovements.objects.filter(ist_id = _ist_id).filter(build_id = item.build_id).update(end = now())
 						if _build_id != -1:
@@ -332,7 +342,7 @@ def getMessages(request):
 
 			messages= []
 			for item in allMessages:
-				messages.insert(0,{'date':item.date, 'content':item.content, 'sender':item.sender})
+				messages.append({'date':item.date, 'content':item.content, 'sender':item.sender})
 
 		return JsonResponse({'messages':messages})
 
