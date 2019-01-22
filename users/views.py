@@ -342,7 +342,7 @@ def getMessages(request):
 
 			messages= []
 			for item in allMessages:
-				messages.append({'date':item.date, 'content':item.content, 'sender':item.sender})
+				messages.insert(0,{'date':item.date, 'content':item.content, 'sender':item.sender})
 
 		return JsonResponse({'messages':messages})
 

@@ -39,7 +39,7 @@ def login_view(request):
 		if username == 'admin' and password == '123':
 			#print('fiz login\n')
 
-			cache.set(secret, 1, 60*5)
+			cache.set(secret, 1, 60*60)
 
 			#print('Cache no login: ' + str(cache.get(secret, -1)) + '\n')
 
