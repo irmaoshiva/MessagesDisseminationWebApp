@@ -192,6 +192,7 @@ def logMovementsUser(secret):
 		print("MOVEMENT " + str(i))
 		print('IST ID: ' + aux['fields']['ist_id'])
 		print('Building ID: ' + aux['fields']['build_id'])
+		print('Building Name: ' + aux['fields']['build_name'])
 		print('Entry Date: ' + aux['fields']['start'])
 		print('Exit Date: ' + str(aux['fields']['end']) + '\n')
 		i = i + 1
