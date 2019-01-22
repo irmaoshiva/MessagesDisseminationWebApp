@@ -63,16 +63,6 @@ def index(request):
 			response.delete_cookie('token')
 	return response
 
-
-'''
-def auxiliar(request):
-	Buildings.objects.all().delete()
-	Messages.objects.all().delete()
-	LogsMovements.objects.all().delete()
-	
-	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
-'''
-
 def login(request):
 	return redirect(request_url)
 
@@ -342,7 +332,7 @@ def getMessages(request):
 
 			messages= []
 			for item in allMessages:
-				messages.append({'date':item.date, 'content':item.content, 'sender':item.sender})
+				messages.insert(0,{'date':item.date, 'content':item.content, 'sender':item.sender})
 
 		return JsonResponse({'messages':messages})
 
