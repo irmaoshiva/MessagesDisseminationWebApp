@@ -344,7 +344,7 @@ def logout(secret):
 		return
 
 def clearBD(secret):
-	r = requests.post("https://asint-227820.appspot.com/admin/clearBD/", data = secret)
+	r = requests.post("https://asint-227820.appspot.com/admin/clear/", data = secret)
 
 def main():
 	print("\n---------- ADMINISTRATOR PAGE ----------\n")

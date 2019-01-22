@@ -102,6 +102,7 @@ def clear(request):
 		Messages.objects.all().delete()
 		LogsMovements.objects.all().delete()
 		Bots.objects.all().delete()
+		Users.objects.all().delete()
 
 		return HttpResponse(response, content_type = 'application/json')
 	else:
