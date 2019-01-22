@@ -101,6 +101,8 @@ def clear(request):
 		Buildings.objects.all().delete()
 		Messages.objects.all().delete()
 		LogsMovements.objects.all().delete()
+		Bots.objects.all().delete()
+
 		return HttpResponse(response, content_type = 'application/json')
 	else:
 		return HttpResponse("Error: Invalid Request", content_type = "text/plain", status = 400)

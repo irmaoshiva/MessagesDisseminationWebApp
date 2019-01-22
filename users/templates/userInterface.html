@@ -202,17 +202,13 @@
 		</p>
 
 
-
-
-
 		<form action="{% url 'users:range' %}" method="post" >
 			  {% csrf_token %}
 		      <p>Range	      	 <input type="number" min="0" name="range" required/>
 		      <input type="submit"  /> </p>
 		</form>
 
-			<h4> Who is nearby me on: 
-
+		<h4> Who is nearby me on: 
 		<a href="{% url 'users:nearbyBuilding' %}">myBuilding</a>   <a href="{% url 'users:nearbyRange' %}">myRange</a> </h4>
 
 
@@ -257,14 +253,9 @@
         </table>
 
 
-
-		
-
-
-
-
-
 	</body>
+
+	
 {% else %}
 	
 	<body>
