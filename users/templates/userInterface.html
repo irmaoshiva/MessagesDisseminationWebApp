@@ -80,7 +80,7 @@
 
 				    $.ajax({
 					    type: 'POST',
-					    url: '/app/updateLocation/',
+					    url: '/app/location/',
 					    data: { 
 					        'lat': position.coords.latitude, 
 					        'longit': position.coords.longitude 
@@ -121,7 +121,7 @@
 					}
 
 					function getBuild() {
-					    $.get('/app/updateBuilding/', function(data){
+					    $.get('/app/building/', function(data){
 					        buid_name = data.build;
 
 							var x = document.getElementById("demo1");

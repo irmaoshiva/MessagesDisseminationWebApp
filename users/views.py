@@ -66,8 +66,11 @@ def index(request):
 
 
 def auxiliar(request):
-	x=Buildings.objects.all()
-	print(x)
+
+	_m= Messages(content='xxx', receiver='ist425412', sender='ist423333', date= now(), build_id= -1)
+	_m.save()
+	_m1= Messages(content='yyy', receiver='ist42553', sender='ist425412', date= now(), build_id= -1)
+	_m1.save()
 	
 	return HttpResponse('<p>FUNCAO AUXILIAR </p>')
 

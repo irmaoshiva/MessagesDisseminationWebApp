@@ -14,12 +14,12 @@ urlpatterns = [
     path('range/', csrf_exempt(views.range), name = 'range'),
     path('message/', csrf_exempt(views.sendMessage), name = 'sendMessage'),
     path('messageBuilding/', csrf_exempt(views.sendMessageBuild), name = 'sendMessageBuild'),
-    path('nearby/range/', csrf_exempt(views.nearbyRange), name = 'nearbyRange'),
-    path('nearby/building/', csrf_exempt(views.nearbyBuilding), name = 'nearbyBuilding'),
-    path('updateLocation/', csrf_exempt(views.updateLocation), name = 'updateLocation'),
-    #path('auxiliar/', csrf_exempt(views.auxiliar), name = 'auxiliar'),
+    path('users/range/', csrf_exempt(views.nearbyRange), name = 'nearbyRange'),
+    path('users/building/', csrf_exempt(views.nearbyBuilding), name = 'nearbyBuilding'),
+    path('location/', csrf_exempt(views.updateLocation), name = 'updateLocation'),
+    path('auxiliar/', csrf_exempt(views.auxiliar), name = 'auxiliar'),
     path('getMessages/', csrf_exempt(views.getMessages), name = 'getMessages'),
-    path('updateBuilding/', csrf_exempt(views.updateBuilding), name = 'updateBuilding'),
+    path('building/', csrf_exempt(views.updateBuilding), name = 'updateBuilding'),
 
 
     ]

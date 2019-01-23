@@ -192,7 +192,6 @@ def logMovementsUser(secret):
 		print("MOVEMENT " + str(i))
 		print('IST ID: ' + aux['fields']['ist_id'])
 		print('Building ID: ' + aux['fields']['build_id'])
-		print('Entry Date: ' + aux['fields']['start'])
 		print('Exit Date: ' + str(aux['fields']['end']) + '\n')
 		i = i + 1
 
@@ -276,6 +275,8 @@ def logMessagesUser(secret):
 	for aux in data:
 		print("MESSAGE " + str(i))
 		print('Content: ' + aux['fields']['content'])
+		print('sender ID: '+ aux['fields']['sender'])
+		print('receiver ID: '+ aux['fields']['receiver'])
 		print('Building ID: ' + aux['fields']['build_id'])
 		print('Date: ' + aux['fields']['date'] + '\n')
 		i = i + 1
