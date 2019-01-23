@@ -303,10 +303,10 @@ def updateLocation(request):
 			_longit=float(_longit)
 			_build_id = checkBuilding(_lat,_longit)
 
-			_build = Buildings.objects.filter(id=_build_id)
-			for item in _build:
-				_build_name=item.name
-
+			#print('longit')
+			#print(_longit)
+			#print('latittt')
+			#print(_lat)
 
 			_user =  Users.objects.filter(ist_id = _ist_id)
 
@@ -317,10 +317,10 @@ def updateLocation(request):
 					Users.objects.filter(ist_id = _ist_id).update(lat = _lat, longit = _longit, build_id = _build_id)
 					if not LogsMovements.objects.filter(ist_id = _ist_id):
 						if _build_id != -1:
-							_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now(), build_name = _build_name)
+							_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now())
 							_logs.save()
 					else:
-						LogsMovements.objects.filter(ist_id = _ist_id).filter(build_id = item.build_id).update(end = now(), build_name = _build_name)
+						LogsMovements.objects.filter(ist_id = _ist_id).filter(build_id = item.build_id).update(end = now())
 						if _build_id != -1:
 							_logs = LogsMovements(ist_id = _ist_id, build_id = _build_id, start = now())
 							_logs.save()

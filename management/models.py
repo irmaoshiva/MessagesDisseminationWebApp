@@ -28,7 +28,6 @@ class LogsMovements(models.Model):
 	build_id = models.CharField(max_length = 255)
 	start = models.DateTimeField()
 	end = models.DateTimeField(blank = True, null = True)
-	build_name = models.CharField(max_length = 255)
 
 	def __str__(self):
 		return self.ist_id
