@@ -3,8 +3,6 @@ from pprint import pprint
 
 print("Bot ID:")
 bot_id = input("> ")
-print("Building ID:")
-build_id = input("> ")
 print("Password:")
 password = input("> ")
 print("Message:")
@@ -14,7 +12,7 @@ number = input("> ")
 print("Periodicity:")
 periodicity = input("> ")
 
-payload = {"bot_id" : bot_id, "build_id" : build_id, "password" : password, "message" : message, "number" : number, "periodicity" : periodicity}
+payload = {"bot_id" : bot_id, "password" : password, "message" : message, "number" : number, "periodicity" : periodicity}
 
 r = requests.post("https://asint-227820.appspot.com/bots/", data = payload)
 
