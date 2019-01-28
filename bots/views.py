@@ -20,14 +20,14 @@ def sendMessages(request):
 	if request.method == 'POST':
 		
 		_bot_id = request.POST.get('bot_id', '')
-		_build_id = request.POST.get('build_id', '')
 		_password = request.POST.get('password', '')
 
 		#print('Bot ID: ' + _bot_id)
 		#print('Building ID: ' + _build_id)
 		#print('Password: ' + _password + '\n')
+		aux = Bots.objects.filter(id = _bot_id, password = _password)
 
-		if not Bots.objects.filter(id = _bot_id, build_id = _build_id, password = _password):
+		if not aux:
 			return HttpResponse("Error: Invalid Arguments", content_type = "text/plain", status = 400)
 
 		_content = request.POST.get('message', '')
@@ -41,6 +41,10 @@ def sendMessages(request):
 		_periodicity = request.POST.get('periodicity', '')
 		if not _periodicity:
 			_periodicity = '0'
+
+		for item in aux:
+			_build_id = item.build_id
+
 
 		while True:
 			_allUsers = Users.objects.filter(build_id = _build_id)
